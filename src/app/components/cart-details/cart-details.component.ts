@@ -34,19 +34,22 @@ export class CartDetailsComponent implements OnInit {
 
 
   incrementAmount(tempCartItem: CartItem) {
-    this.productService.getProduct(tempCartItem.id).subscribe(data => this.product = data);
+    // this.productService.getProduct(tempCartItem.id).subscribe(data => this.product = data);
+    //
+    // //call method that change reactive field quantity & total price of type Subject to recalculate it after increase and then back emit
+    // this.cartService.addToCart(this.product);
 
-    //call method that change reactive field quantity & total price of type Subject to recalculate it after increase and then back emit
-    this.cartService.addToCart(this.product);
+    this.cartService.cartItems.filter(item2 => item2.id === tempCartItem.id).map(item => item.quantity++);
 
   }
 
   decreaseAmount(tempCartItem: CartItem){
     if(tempCartItem.quantity>0) {
-      this.productService.getProduct(tempCartItem.id).subscribe(data => this.product = data);
-
-      //call method that change reactive field quantity & total price of type Subject to recalculate it after decrease and then emit back
-      this.cartService.decreaseAmountOfItemInCart(this.product);
+      // this.productService.getProduct(tempCartItem.id).subscribe(data => this.product = data);
+      //
+      // //call method that change reactive field quantity & total price of type Subject to recalculate it after decrease and then emit back
+      // this.cartService.decreaseAmountOfItemInCart(this.product);
+      this.cartService.cartItems.filter(item2 => item2.id === tempCartItem.id).map(item => item.quantity--);
     }
   }
 
