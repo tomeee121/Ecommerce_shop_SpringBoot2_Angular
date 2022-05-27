@@ -19,6 +19,7 @@ export class CartService {
 
     // let alreadyAddedToCart: boolean = false;
     // let productAlreadyAddedToCart: CartItem;
+    let alreadyAddedToCart: boolean = false;
     let cartItem: CartItem = new CartItem(product);
     if(this.cartItems.length>0) {
       //check if we already have an item in the cart
@@ -27,23 +28,21 @@ export class CartService {
 
           //if product selected was already in cart - increment its amount in user's cart
           tempCartItem.quantity++;
+          alreadyAddedToCart = true;
           break;
 
-        }
-        else{
-          cartItem.quantity = 1;
-          this.cartItems.push(cartItem);
-          break;
         }
       }
     }
     //if cartItems array is empty selected product is automatically added to cart
-    else{
+
+    if(alreadyAddedToCart === false){
       cartItem.quantity = 1;
       this.cartItems.push(cartItem);
     }
     this.calculateCart();
   }
+
 
   calculateCart(){
     //after each CartItem added to cart
