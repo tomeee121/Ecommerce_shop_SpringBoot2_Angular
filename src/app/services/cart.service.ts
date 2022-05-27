@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {CartItem} from "../common/cart-item";
 import {of, Subject} from "rxjs";
 import {Product} from "../common/product";
+import {compareNumbers} from "@angular/compiler-cli/src/version_helpers";
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,23 @@ export class CartService {
     this.calculateCart();
   }
 
+  decreaseAmountOfItemInCart(product: Product){
+
+    let cartItem: CartItem = new CartItem(product);
+      //search for the item user chose to decrease
+      for (let tempCartItem of this.cartItems) {
+        if(tempCartItem.id === cartItem.id){
+
+          //decrease quantity
+          tempCartItem.quantity--;
+          if(tempCartItem.quantity === 0){
+            this.remove(tempCartItem);
+          }
+          break;
+        }
+      }
+      this.calculateCart();
+    }
 
   calculateCart(){
     //after each CartItem added to cart
@@ -55,4 +73,12 @@ export class CartService {
     this.totalQuantity.next(totalQuantityCalculated);
     this.totalPrice.next(totalAmountOfMoneyCalculated);
   }
+
+  remove(cartItem: CartItem){
+    let index: number = this.cartItems.findIndex(tempCartItem => tempCartItem.id === cartItem.id);
+    this.cartItems.splice(index, 1);
+    this.calculateCart();
+  }
+
+
 }

@@ -692,8 +692,14 @@ table.table.table-bordered{
   background:#fff
 }
 .table-bordered td,.table-bordered th{
-  border:1px solid #dee2e6
+  border:1px solid #dee2e6;
 }
+
+.table-bordered td p{
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
 table.table.table-bordered th{
   BACKGROUND:#0da8e4;
   color:#fff;
@@ -1044,4 +1050,5 @@ footer ul li{
     border:0;
     padding:8px 0
   }
+
 }
