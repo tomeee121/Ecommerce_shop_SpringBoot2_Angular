@@ -519,7 +519,11 @@ input.au-input.au-input-xl{
   background:#fff
 }
 .main-content.page-m{
-  padding:10% 15%!important
+  padding:10% 30% 10% 5%;
+}
+.main-content.p{
+  font-weight: 900;
+  margin-left: 100px;
 }
 
 /*
@@ -621,6 +625,24 @@ input.au-input.au-input-xl{
   -ms-user-select:none;
   user-select:none
 }
+
+.user-select-none{
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none
+}
+
+.price-user-select-none{
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  margin:15px 0 0;
+  font-weight:800;
+  color:#0da8e4;
+}
+
 .au-checkbox input{
   position:absolute;
   opacity:0;

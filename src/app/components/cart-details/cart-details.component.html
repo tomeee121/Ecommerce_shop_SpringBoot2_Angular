@@ -22,7 +22,7 @@
               <p>Quantity:</p>
               <button (click)="incrementAmount(tempCartItem)" class="btn btn-primary btn-sm" style="margin-left: 10px; margin-bottom: 5px; margin-right: 60px"><i class="fas fa-plus"></i></button>
               {{tempCartItem.quantity}}
-              <button (click)="decreaseAmount(tempCartItem)" class="btn btn-primary btn-sm" style="margin-left: 60px;margin-bottom: 5px"><i class="fas fa-minus"></i></button>
+              <button (click)="decreaseAmount(tempCartItem)" class="btn btn-primary btn-sm" style="margin-left: 60px; margin-bottom: 5px;"><i class="fas fa-minus"></i></button>
               <br>
               <button (click)="removeItem(tempCartItem)" class="btn btn-primary btn-sm" style="margin: 15px 10px;"><i class="fa-solid fa-trash"></i></button>
               <p>Unit item price: {{tempCartItem.unitPrice | currency: 'USD'}}</p>
@@ -35,6 +35,7 @@
             <p style="font-weight: 700">Overall amount of items: {{totalQuantityDetail}}</p>
             <p style="font-weight: 700">Amount to pay: {{totalPriceDetail | currency: 'USD'}}</p>
             <p>Delivery: FREE</p>
+            <a routerLink="/checkout"><button class="btn btn-primary" style="margin-left: 10px;margin-bottom: 5px">Checkout</button></a>
             </td>
           </tr>
         </tbody>
