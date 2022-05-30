@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CartService} from "../../services/cart.service";
+import {ShopFormService} from "../../services/shop-form.service";
 
 // @ts-ignore
 @Component({
@@ -15,10 +16,12 @@ export class CheckoutComponent implements OnInit {
   totalQuantity: number = 0;
   totalPrice: number = 0;
 
-  constructor(private formBuilder: FormBuilder, private cartService: CartService) { }
+  creditCardMonths: number[] = [];
+  creditCardYears: number[] = [];
+
+  constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService) { }
 
   ngOnInit(): void {
-
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: [''],
@@ -48,7 +51,8 @@ export class CheckoutComponent implements OnInit {
         expirationYear: ['']
       })
     })
-
+    this.getCreditCardYears();
+    this.checkExpirationYearChosen();
   }
 
   onSubmit(){
@@ -64,5 +68,26 @@ export class CheckoutComponent implements OnInit {
       // @ts-ignore
       this.checkoutFormGroup.controls.billingAdress.reset();
     }
+  }
+
+  //if during the complement of this component expiration year of credit card is current year do not show previous months to choose later in a drop-down list
+  checkExpirationYearChosen(){
+    // let expirationYearChosen: number = this.checkoutFormGroup.value.expirationYear;
+    const creditCard = this.checkoutFormGroup.get('creditCard');
+    const expirationYear: number = Number(creditCard?.value.expirationYear);
+    console.log(expirationYear + ` expiration year`);
+
+    let currentYear: number = new Date().getFullYear();
+    console.log(currentYear + ` current year`);
+    let startMonth: number = new Date().getMonth();
+    console.log(startMonth + ` start month`);
+    if(expirationYear === currentYear || expirationYear === 0){
+      this.shopFormService.getCreditCardMonths(startMonth+1).subscribe(data => this.creditCardMonths = data);
+    }
+    else{this.shopFormService.getCreditCardMonths(1).subscribe(data => this.creditCardMonths = data);}
+  }
+
+  getCreditCardYears(){
+    this.shopFormService.getCreditCardYears().subscribe(data=>this.creditCardYears=data);
   }
 }
