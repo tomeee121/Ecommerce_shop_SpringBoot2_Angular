@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CartService} from "../../services/cart.service";
 import {ShopFormService} from "../../services/shop-form.service";
+import {Country} from "../../common/country";
+import {State} from "../../common/state";
 
 // @ts-ignore
 @Component({
@@ -18,6 +20,8 @@ export class CheckoutComponent implements OnInit {
 
   creditCardMonths: number[] = [];
   creditCardYears: number[] = [];
+  countries: Country[] = [];
+  states: State[] = [];
 
   constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService) { }
 
@@ -53,6 +57,8 @@ export class CheckoutComponent implements OnInit {
     })
     this.getCreditCardYears();
     this.checkExpirationYearChosen();
+    this.shopFormService.getCountries().subscribe(data => this.countries = data);
+    this.getStatesOnInit();
   }
 
   onSubmit(){
@@ -89,5 +95,18 @@ export class CheckoutComponent implements OnInit {
 
   getCreditCardYears(){
     this.shopFormService.getCreditCardYears().subscribe(data=>this.creditCardYears=data);
+  }
+
+  getStatesOnInit(){
+    this.shopFormService.getStates().subscribe(data => this.states = data);
+  }
+
+  getStates(shippingAdress: string) {
+    //get form group name from html
+    const shippingGroup = this.checkoutFormGroup.get(shippingAdress);
+    //use it to get a control name value
+    let countryChosenCode1 = shippingGroup?.value.country.code;
+    // const chosenCountryCode: string = this.countries.filter(country => country.name === countryChosen.name).map(country => country.code)[0];
+    this.shopFormService.getStatesForGivenCountryCode(countryChosenCode1).subscribe(data => this.states = data);
   }
 }

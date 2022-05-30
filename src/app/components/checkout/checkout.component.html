@@ -30,6 +30,22 @@
           </div>
         </div>
         <div formGroupName="shippingAdress" class="form-area">
+          <div class="row">
+            <div class="col-md-2"><label>Country</label></div>
+            <div class="input-space col-md-9">
+              <select (change)="getStates('shippingAdress')" formControlName="country">
+                <option *ngFor="let country of countries" [ngValue]="country">{{country.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-2"><label>State</label></div>
+            <div class="input-space col-md-9">
+              <select formControlName="state">
+                <option *ngFor="let state of states" [ngValue]="state">{{state.name}}</option>
+              </select>
+            </div>
+          </div>
           <h3>Shipping adress</h3>
           <div class="row">
             <div class="col-md-2"><label>Street</label></div>
@@ -48,22 +64,6 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-2"><label>State</label></div>
-            <div class="col-md-9">
-              <div class="input-space">
-                <input formControlName="state" type="text">
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-2"><label>Country</label></div>
-            <div class="col-md-9">
-              <div class="input-space">
-                <input formControlName="country" type="text">
-              </div>
-            </div>
-          </div>
-          <div class="row">
             <div class="col-md-2"><label>Zip code</label></div>
             <div class="col-md-9">
               <div class="input-space">
@@ -78,6 +78,21 @@
         </div>
 
           <div formGroupName="billingAdress" class="form-area">
+            <div class="row">
+              <div class="col-md-2"><label>Country</label></div>
+              <div class="input-space col-md-9">
+                <select (change)="getStates('billingAdress')" formControlName="country">
+                  <option *ngFor="let country of countries" [ngValue]="country">{{country.name}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2"><label>State</label></div>
+              <div class="input-space col-md-9">
+                <select formControlName="state">
+                  <option *ngFor="let state of states" [ngValue]="state">{{state.name}}</option>
+                </select>
+              </div>
             <h3>Billing adress</h3>
             <div class="row">
               <div class="col-md-2"><label>Street</label></div>
@@ -96,22 +111,6 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-2"><label>State</label></div>
-              <div class="col-md-9">
-                <div class="input-space">
-                  <input formControlName="state" type="text">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-2"><label>Country</label></div>
-              <div class="col-md-9">
-                <div class="input-space">
-                  <input formControlName="country" type="text">
-                </div>
-              </div>
-            </div>
-            <div class="row">
               <div class="col-md-2"><label>Zip code</label></div>
               <div class="col-md-9">
                 <div class="input-space">
@@ -119,6 +118,7 @@
                 </div>
               </div>
             </div>
+          </div>
           </div>
             <div formGroupName="creditCard" class="form-area">
               <h3>Credit Card</h3>
