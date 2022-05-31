@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CartService} from "../../services/cart.service";
 import {ShopFormService} from "../../services/shop-form.service";
 import {Country} from "../../common/country";
 import {State} from "../../common/state";
+import {FormValidators} from "../../validators/form-validators";
 
 // @ts-ignore
 @Component({
@@ -23,49 +24,76 @@ export class CheckoutComponent implements OnInit {
   countries: Country[] = [];
   states: State[] = [];
 
-  constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService) { }
+  constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService) {
+  }
 
   ngOnInit(): void {
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: [''],
-        lastName: [''],
-        email: ['']
+        firstName: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        lastName: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        email: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,4}$'),FormValidators.rejectOnlyWhiteSpace])
       }),
       shippingAdress: this.formBuilder.group({
-        street: [''],
-        city: [''],
-        state: [''],
-        country: [''],
-        zipCode: ['']
+        country: new FormControl('', [Validators.required]),
+        state: new FormControl('', [Validators.required]),
+        city: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        street: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        zipCode: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
       }),
       billingAdress: this.formBuilder.group({
-        street: [''],
-        city: [''],
-        state: [''],
-        country: [''],
-        zipCode: ['']
+        country: new FormControl('', [Validators.required]),
+        state: new FormControl('', [Validators.required]),
+        city: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        street: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        zipCode: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace])
       }),
       creditCard: this.formBuilder.group({
-        cardType: [''],
-        nameOnCard: [''],
-        cardNumber: [''],
-        securityCode: [''],
+        cardType: new FormControl('', [Validators.required, FormValidators.rejectOnlyWhiteSpace]),
+        nameOnCard: new FormControl('', [Validators.required, FormValidators.rejectOnlyWhiteSpace]),
+        cardNumber: new FormControl('', [Validators.required, FormValidators.rejectOnlyWhiteSpace, Validators.pattern('[0-9]{16}')]),
+        securityCode: new FormControl('', [Validators.required, FormValidators.rejectOnlyWhiteSpace, Validators.pattern('[0-9]{3}')]),
         expirationMonth: [''],
         expirationYear: ['']
       })
     })
+
     this.getCreditCardYears();
     this.checkExpirationYearChosen();
-    this.shopFormService.getCountries().subscribe(data => this.countries = data);
+    this.shopFormService.getCountries().subscribe(
+      data => {this.countries = data;
+           this.checkoutFormGroup.get('shippingAdress')?.get('country')?.setValue(data[0])});
     this.getStatesOnInit();
   }
 
   onSubmit(){
     console.log(this.checkoutFormGroup.get('customer')?.value.email);
+    if(this.checkoutFormGroup.invalid){
+      this.checkoutFormGroup.markAllAsTouched();}
   }
 
-  // @ts-ignore
+  get firstName() {return this.checkoutFormGroup?.get('customer.firstName');}
+  get lastName() {return this.checkoutFormGroup.get('customer.lastName');}
+  get email() {return this.checkoutFormGroup.get('customer.email');}
+
+  get shippingAdressCountry(){return this.checkoutFormGroup.get('shippingAdress.country');}
+  get shippingAdressState(){return this.checkoutFormGroup.get('shippingAdress.state');}
+  get shippingAdressStreet(){return this.checkoutFormGroup.get('shippingAdress.street');}
+  get shippingAdressCity(){return this.checkoutFormGroup.get('shippingAdress.city');}
+  get shippingAdressZipCode(){return this.checkoutFormGroup.get('shippingAdress.zipCode');}
+
+  get billingAdressCountry(){return this.checkoutFormGroup.get('billingAdress.country');}
+  get billingAdressState(){return this.checkoutFormGroup.get('billingAdress.state');}
+  get billingAdressStreet(){return this.checkoutFormGroup.get('billingAdress.street');}
+  get billingAdressCity(){return this.checkoutFormGroup.get('billingAdress.city');}
+  get billingAdressZipCode(){return this.checkoutFormGroup.get('billingAdress.zipCode');}
+
+  get creditCardName(){return this.checkoutFormGroup.get('creditCard.nameOnCard');}
+  get creditCardType(){return this.checkoutFormGroup.get('creditCard.cardType');}
+  get creditCardNumber(){return this.checkoutFormGroup.get('creditCard.cardNumber');}
+  get creditCardSecurityCode(){return this.checkoutFormGroup.get('creditCard.securityCode');}
+
+   // @ts-ignore
   makeBillingAdressFieldsEqualToShippingAdress(event){
     if(event.target.checked){
     // @ts-ignore
@@ -98,7 +126,9 @@ export class CheckoutComponent implements OnInit {
   }
 
   getStatesOnInit(){
-    this.shopFormService.getStates().subscribe(data => this.states = data);
+    this.shopFormService.getStates().subscribe(
+      data => {this.states = data;
+           this.checkoutFormGroup.get('shippingAdress')?.get('state')?.setValue(data[0])});
   }
 
   getStates(shippingAdress: string) {
@@ -107,6 +137,7 @@ export class CheckoutComponent implements OnInit {
     //use it to get a control name value
     let countryChosenCode1 = shippingGroup?.value.country.code;
     // const chosenCountryCode: string = this.countries.filter(country => country.name === countryChosen.name).map(country => country.code)[0];
-    this.shopFormService.getStatesForGivenCountryCode(countryChosenCode1).subscribe(data => this.states = data);
-  }
-}
+    this.shopFormService.getStatesForGivenCountryCode(countryChosenCode1).subscribe(
+      data => {this.states = data;
+          this.checkoutFormGroup.get('shippingAdress')?.get('state')?.setValue(data[0])});
+}}
