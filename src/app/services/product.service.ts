@@ -20,10 +20,10 @@ export class ProductService {
     return this.httpClient.get<Product>(productUrl);
   }
 
-  getProductListPaginate(thePage: number, pageSize: number, theCategoryId: number): Observable<GetResponseProducts[]>{
+  getProductListPaginate(thePage: number, pageSize: number, theCategoryId: number): Observable<GetResponseProducts>{
     const searchUrl = `${this.baseUrl}/search/findByProductCategoryId?id=${theCategoryId}&page=${thePage}&size=${pageSize}`;
 
-    return this.httpClient.get<GetResponseProducts[]>(searchUrl);
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
   getProductList(theCategoryId: number): Observable<Product[]>{
     const searchUrl = `${this.baseUrl}/search/findByProductCategoryId?id=${theCategoryId}`;
@@ -46,10 +46,10 @@ export class ProductService {
     return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(map(data => data._embedded.products));
   }
 
-  searchProductsPaginate(thePage: number, pageSize: number, keyword: string | null): Observable<GetResponseProducts[]>{
+  searchProductsPaginate(thePage: number, pageSize: number, keyword: string | null): Observable<GetResponseProducts>{
     const searchUrl = `${this.baseUrl}/search/findByNameContainingIgnoreCase?name=${keyword}&page=${thePage}&size=${pageSize}`;
 
-    return this.httpClient.get<GetResponseProducts[]>(searchUrl);
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
 }
 interface GetResponseProducts{

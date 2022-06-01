@@ -3,6 +3,7 @@ import {ProductService} from "../../services/product.service";
 import {Product} from "../../common/product";
 import {ActivatedRoute} from "@angular/router";
 import {CartService} from "../../services/cart.service";
+import {SearchComponent} from "../search/search.component";
 
 
 @Component({
@@ -24,19 +25,18 @@ export class ProductListComponent implements OnInit {
 
   searchMode: boolean = false;
 
-  // @ts-ignore
-  previousSearchedKeyword: string | null;
+  previousSearchedKeyword: string | null = '';
 
-  thePageNumber: number = 1;
+  thePageNumber: number = 0;
   thePageSize: number = 5;
-  theTotalElements: number = 0;
+  theTotalElements: number = 5;
 
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(() => {this.subscribeProducts();})
   }
 
-  private subscribeProducts() {
+  subscribeProducts() {
     this.searchMode = this.route.snapshot.paramMap.has('keyword');
     if(this.searchMode){
       this.handleSearchProducts()}
@@ -45,13 +45,15 @@ export class ProductListComponent implements OnInit {
   }
 
   handleSearchProducts() {
-    const keyword = this.route.snapshot.paramMap.get('keyword');
+    let keyword: string | null = this.route.snapshot.paramMap.get('keyword');
     if(this.previousSearchedKeyword!=keyword){
       this.thePageNumber = 1;
     }
     this.previousSearchedKeyword = keyword;
 
-    this.productService.searchProductsPaginate(this.thePageNumber, this.thePageSize, keyword).subscribe(this.processResults());
+    this.productService.searchProductsPaginate(this.thePageNumber-1, this.thePageSize, keyword).subscribe(this.processResults());
+
+    console.log(this.products[0]+`konsolka --- `+keyword);
   }
 
   handleList(){
@@ -72,7 +74,7 @@ export class ProductListComponent implements OnInit {
     //If the CategoryId is Different than previouse because ActiveRoute detected change then we switch to a new data of products
     //that is the reason for setting page nr to 1
     if(this.previousCategoryId != this.currentCategoryId){
-      this.thePageNumber = 1;
+      this.thePageNumber = 0;
     }
     //if we continue paginating the same category setting page number constantly as 1 would be a bug
     this.previousCategoryId = this.currentCategoryId;
@@ -83,7 +85,7 @@ export class ProductListComponent implements OnInit {
                                               .subscribe(this.processResults());
   }
 
-  private processResults() {
+  processResults() {
     // @ts-ignore
     return data => {this.products = data._embedded.products;
                     this.thePageNumber = data.page.number+1;
@@ -93,8 +95,8 @@ export class ProductListComponent implements OnInit {
 
   updatePageSize(size: any) {
     this.thePageSize = size.target.value;
-    this.thePageNumber = 1;
-    this.handleList();
+    this.thePageNumber = 0;
+    this.subscribeProducts();
 
   }
 
