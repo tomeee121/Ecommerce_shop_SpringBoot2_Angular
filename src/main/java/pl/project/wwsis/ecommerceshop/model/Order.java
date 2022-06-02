@@ -11,12 +11,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "order_table")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String orderTrackingNumber;
     private int totalQuantity;
+    @Column(name = "total_price", columnDefinition="DECIMAL(10,2)")
     private BigDecimal totalPrice;
     private String status;
     @CreationTimestamp
@@ -25,7 +27,7 @@ public class Order {
     private Date dateUpdated;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> orders = new HashSet<>();
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
     @OneToOne(cascade = CascadeType.ALL)

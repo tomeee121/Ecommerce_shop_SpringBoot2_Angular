@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="002.1-table address added" author="Tomek ">
+        <createTable tableName="address">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_address"/>
+            </column>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="zip_code" type="VARCHAR(255)"/>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="state" type="VARCHAR(255)"/>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="order_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="002.2-table customer added" author="Tomek">
+        <createTable tableName="customer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_customer"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="002.3-order table added" author="Tomek ">
+        <createTable tableName="order">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order"/>
+            </column>
+            <column name="order_tracking_number" type="VARCHAR(255)"/>
+            <column name="total_quantity" type="INT"/>
+            <column name="total_price" type="DECIMAL"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="date_created" type="DATETIME"/>
+            <column name="date_updated" type="DATETIME"/>
+            <column name="customer_id" type="BIGINT"/>
+            <column name="shipping_address_id" type="BIGINT"/>
+            <column name="billing_address_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="002.4-order item table added" author="Tomek">
+        <createTable tableName="order_item">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order_item"/>
+            </column>
+            <column name="image_url" type="VARCHAR(255)"/>
+            <column name="unit_price" type="DECIMAL"/>
+            <column name="quantity" type="INT"/>
+            <column name="product_id" type="BIGINT"/>
+            <column name="order_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="002.5-address->order foreign key constraint" author="Tomek ">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="address" constraintName="FK_ADDRESS_ON_ORDER"
+                                 referencedColumnNames="id" referencedTableName="order"/>
+    </changeSet>
+    <changeSet id="002.6-order item -> order foreign key contraint" author="Tomek ">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_item"
+                                 constraintName="FK_ORDER_ITEM_ON_ORDER" referencedColumnNames="id"
+                                 referencedTableName="order"/>
+    </changeSet>
+    <changeSet id="002.7-order -> address foreign key contraint" author="Tomek ">
+        <addForeignKeyConstraint baseColumnNames="billing_address_id" baseTableName="order"
+                                 constraintName="FK_ORDER_ON_BILLING_ADDRESS" referencedColumnNames="id"
+                                 referencedTableName="address"/>
+    </changeSet>
+    <changeSet id="002.8-order -> customer foreign key contraint" author="Tomek ">
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="order"
+                                 constraintName="FK_ORDER_ON_CUSTOMER" referencedColumnNames="id"
+                                 referencedTableName="customer"/>
+    </changeSet>
+    <changeSet id="002.9-order -> address foreign key constraint" author="Tomek ">
+        <addForeignKeyConstraint baseColumnNames="shipping_address_id" baseTableName="order"
+                                 constraintName="FK_ORDER_ON_SHIPPING_ADDRESS" referencedColumnNames="id"
+                                 referencedTableName="address"/>
+    </changeSet>
+
+</databaseChangeLog>

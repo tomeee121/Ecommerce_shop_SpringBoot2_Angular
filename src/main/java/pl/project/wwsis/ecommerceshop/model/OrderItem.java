@@ -10,6 +10,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String imageUrl;
+    @Column(name = "unit_price", columnDefinition="DECIMAL(10,2)")
     private BigDecimal unitPrice;
     private int quantity;
     private Long productId;

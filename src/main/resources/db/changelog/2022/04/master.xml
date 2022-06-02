@@ -6,6 +6,9 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
     <include file="db/changelog/changesets/001-table country, state added.xml"/>
+    <include file="db/changelog/changesets/002-address, customer, order, order_item tables and constraints added.xml"/>
+    <include file="db/changelog/changesets/002.10-order table name changed due to key word problems in db.xml"/>
+    <include file="db/changelog/changesets/002.11-add precision to BigDecimal values for Hibernate mapping.xml"/>
     <changeSet id="1.0.0" author="Tomek (generated)">
         <createTable tableName="product">
             <column autoIncrement="true" name="id" type="BIGINT">
