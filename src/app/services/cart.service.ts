@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import {CartItem} from "../common/cart-item";
-import {of, Subject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 import {Product} from "../common/product";
-import {compareNumbers} from "@angular/compiler-cli/src/version_helpers";
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +9,8 @@ import {compareNumbers} from "@angular/compiler-cli/src/version_helpers";
 export class CartService {
 
   cartItems: CartItem[] = [];
-  totalPrice: Subject<number> = new Subject<number>();
-  totalQuantity: Subject<number> = new Subject<number>();
+  totalPrice: Subject<number> = new BehaviorSubject<number>(0);
+  totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
   constructor() { }
 

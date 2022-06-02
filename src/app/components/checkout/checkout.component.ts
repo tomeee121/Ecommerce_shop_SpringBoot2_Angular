@@ -64,6 +64,7 @@ export class CheckoutComponent implements OnInit {
       data => {this.countries = data;
            this.checkoutFormGroup.get('shippingAdress')?.get('country')?.setValue(data[0])});
     this.getStatesOnInit();
+    this.reviewCartTotal();
   }
 
   onSubmit(){
@@ -140,4 +141,10 @@ export class CheckoutComponent implements OnInit {
     this.shopFormService.getStatesForGivenCountryCode(countryChosenCode1).subscribe(
       data => {this.states = data;
           this.checkoutFormGroup.get('shippingAdress')?.get('state')?.setValue(data[0])});
-}}
+}
+
+  private reviewCartTotal() {
+    this.cartService.totalQuantity.subscribe(data => this.totalQuantity = data);
+    this.cartService.totalPrice.subscribe(data => this.totalPrice = data);
+  }
+}
