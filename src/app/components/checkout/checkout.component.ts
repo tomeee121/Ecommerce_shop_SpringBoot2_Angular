@@ -5,6 +5,14 @@ import {ShopFormService} from "../../services/shop-form.service";
 import {Country} from "../../common/country";
 import {State} from "../../common/state";
 import {FormValidators} from "../../validators/form-validators";
+import {CheckoutServiceService} from "../../services/checkout-service.service";
+import {Order} from "../../common/order";
+import {OrderItem} from "../../common/order-item";
+import {Purchase} from "../../common/purchase";
+import {Address} from "../../common/address";
+import {Router} from "@angular/router";
+import {stringify} from "@angular/compiler/src/util";
+import {isString} from "@ng-bootstrap/ng-bootstrap/util/util";
 
 // @ts-ignore
 @Component({
@@ -24,8 +32,8 @@ export class CheckoutComponent implements OnInit {
   countries: Country[] = [];
   states: State[] = [];
 
-  constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService) {
-  }
+  constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService, private checkoutService: CheckoutServiceService,
+              private router: Router) {}
 
   ngOnInit(): void {
     this.checkoutFormGroup = this.formBuilder.group({
@@ -68,9 +76,57 @@ export class CheckoutComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.checkoutFormGroup.get('customer')?.value.email);
+
+    //for validation
     if(this.checkoutFormGroup.invalid){
       this.checkoutFormGroup.markAllAsTouched();}
+
+    //for backend to save purchase
+    const order = new Order(this.totalQuantity, this.totalPrice);
+    const cartItems = this.cartService.cartItems;
+    let orderItems: OrderItem[] = [];
+    for(let i = 0; i < cartItems.length; i++){
+      orderItems[i] = new OrderItem(cartItems[i]);
+    }
+
+    const shippingAddress: Address = this.checkoutFormGroup?.controls['shippingAdress']?.value;
+    // @ts-ignore
+    shippingAddress.state = this.checkoutFormGroup?.controls['shippingAdress.state']?.value.name;
+    // @ts-ignore
+    shippingAddress.country = this.checkoutFormGroup?.controls['shippingAdress.country']?.value.name;
+
+    const billingAddress: Address = this.checkoutFormGroup?.controls['billingAdress']?.value;
+    // @ts-ignore
+    billingAddress.state = this.checkoutFormGroup?.controls['billingAdress.state']?.value.name;
+    // @ts-ignore
+    billingAddress.country = this.checkoutFormGroup?.controls['billingAdress.country']?.value.name;
+
+    const customer = this.checkoutFormGroup?.controls['customer']?.value;
+
+    const purchase: Purchase = new Purchase(customer,shippingAddress,billingAddress,order,orderItems,'null');
+
+    console.log(`purchase object done`);
+    // @ts-ignore
+    this.checkoutService.placeOrder(purchase).subscribe((data) => this.showAlert(data.orderTrackingNumber), (error) => this.showError());
+    console.log(`order placed`);
+    this.resetCard();
+  }
+
+  showAlert(response: any){
+    alert(`Placed order successfully with number of `+JSON.parse(JSON.stringify(response)));
+  }
+
+  showError(){
+    alert(`There was an error!`);
+  }
+
+  resetCard(){
+    this.cartService.cartItems = [];
+    this.cartService.totalPrice.next(0);
+    this.cartService.totalQuantity.next(0);
+    this.checkoutFormGroup.reset();
+    this.router.navigateByUrl("/products");
+
   }
 
   get firstName() {return this.checkoutFormGroup?.get('customer.firstName');}

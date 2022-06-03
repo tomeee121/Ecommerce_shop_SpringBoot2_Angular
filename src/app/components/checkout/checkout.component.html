@@ -9,11 +9,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="firstName" type="text">
-                <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)" class="alert alert-danger mt-1">
-                  <div *ngIf="firstName?.errors?.['required'] || firstName?.errors?.['rejectOnlyWhiteSpace']">
+                <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)">
+                  <div class="alert alert-danger mt-1" *ngIf="firstName?.errors?.['required'] || firstName?.errors?.['rejectOnlyWhiteSpace']">
                     First name is required
                   </div>
-                  <div *ngIf="firstName?.errors?.['minlength']">
+                  <div class="alert alert-danger mt-1" *ngIf="firstName?.errors?.['minlength']">
                     Choose name containing at least 2 characters
                   </div>
                 </div>
@@ -25,11 +25,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="lastName" type="text">
-                <div *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)" class="alert alert-danger mt-1">
-                  <div *ngIf="lastName?.errors?.['required'] || firstName?.errors?.['rejectOnlyWhiteSpace']">
+                <div *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)">
+                  <div class="alert alert-danger mt-1" *ngIf="lastName?.errors?.['required'] || firstName?.errors?.['rejectOnlyWhiteSpace']">
                     Last name is required
                   </div>
-                  <div *ngIf="firstName?.errors?.['minlength']">
+                  <div class="alert alert-danger mt-1" *ngIf="firstName?.errors?.['minlength']">
                     Choose name containing at least 2 characters
                   </div>
                 </div>
@@ -41,11 +41,11 @@
             <div class="col-md-9">
               <div class="input-space">
                 <input formControlName="email" type="text">
-                <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="alert alert-danger mt-1">
-                  <div *ngIf="email?.errors?.['required']">
+                <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+                  <div class="alert alert-danger mt-1" *ngIf="email?.errors?.['required']">
                     Email is required
                   </div>
-                  <div *ngIf="email?.errors?.['pattern']">
+                  <div class="alert alert-danger mt-1" *ngIf="email?.errors?.['pattern']">
                     Type in correct email
                   </div>
                 </div>
