@@ -10,6 +10,7 @@ import pl.project.wwsis.ecommerceshop.model.Order;
 import pl.project.wwsis.ecommerceshop.model.OrderItem;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,8 +25,10 @@ public class CheckoutServiceImpl implements CheckoutService {
 
     @Override
     @Transactional
-    public PurchaseResponse placeOrder(Purchase purchase) {
-        Order order = purchase.getOrder();
+    public Purchase placeOrder(Purchase purchase) {
+        BigDecimal totalPrice = purchase.getOrder().getTotalPrice();
+        int totalQuantity = purchase.getOrder().getTotalQuantity();
+        Order order = new Order(totalQuantity, totalPrice, "proceeded, prepare for shipment");
 
         String orderTrackingNumber = generateOrderTrackingNumber();
         order.setOrderTrackingNumber(orderTrackingNumber);
@@ -41,8 +44,11 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         customerRepo.save(customer);
 
-        return new PurchaseResponse(orderTrackingNumber);
+        System.out.println(new PurchaseResponse(orderTrackingNumber).getOrderTrackingNumber());
+        Purchase responsePurchase = new Purchase();
+        responsePurchase.setOrderTrackingNumber(orderTrackingNumber);
 
+        return responsePurchase;
     }
 
     private String generateOrderTrackingNumber() {

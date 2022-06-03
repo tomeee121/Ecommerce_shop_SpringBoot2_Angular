@@ -13,6 +13,10 @@ public class Purchase {
     private Address shippingAddress;
     private Address billingAddress;
     private Set<OrderItem> orderItems;
+    private String orderTrackingNumber;
+
+    public Purchase() {
+    }
 
     public Purchase(Customer customer, Order order, Address shippingAddress, Address billingAddress, Set<OrderItem> orderItems) {
         this.customer = customer;
@@ -20,6 +24,14 @@ public class Purchase {
         this.shippingAddress = shippingAddress;
         this.billingAddress = billingAddress;
         this.orderItems = orderItems;
+    }
+
+    public String getOrderTrackingNumber() {
+        return orderTrackingNumber;
+    }
+
+    public void setOrderTrackingNumber(String orderTrackingNumber) {
+        this.orderTrackingNumber = orderTrackingNumber;
     }
 
     public Customer getCustomer() {

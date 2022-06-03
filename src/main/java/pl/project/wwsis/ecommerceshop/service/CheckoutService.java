@@ -4,5 +4,5 @@ import pl.project.wwsis.ecommerceshop.DTO.Purchase;
 import pl.project.wwsis.ecommerceshop.DTO.PurchaseResponse;
 
 public interface CheckoutService {
-    PurchaseResponse placeOrder(Purchase purchase);
+    Purchase placeOrder(Purchase purchase);
 }

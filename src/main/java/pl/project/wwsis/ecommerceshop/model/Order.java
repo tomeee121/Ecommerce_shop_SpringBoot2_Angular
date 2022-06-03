@@ -26,7 +26,7 @@ public class Order {
     @UpdateTimestamp
     private Date dateUpdated;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private Set<OrderItem> orders = new HashSet<>();
+    private Set<OrderItem> orderItems = new HashSet<>();
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -39,7 +39,7 @@ public class Order {
 
     public void add(OrderItem orderItem){
         if(orderItem != null){
-        orders.add(orderItem);
+        orderItems.add(orderItem);
         orderItem.setOrder(this);
         }
     }
@@ -47,15 +47,12 @@ public class Order {
     public Order() {
     }
 
-    public Order(String orderTrackingNumber, int totalQuantity, BigDecimal totalPrice, String status, Date dateCreated, Date dateUpdated, Address shippingAddress, Address billingAddress) {
-        this.orderTrackingNumber = orderTrackingNumber;
+
+
+    public Order(int totalQuantity, BigDecimal totalPrice, String status) {
         this.totalQuantity = totalQuantity;
         this.totalPrice = totalPrice;
         this.status = status;
-        this.dateCreated = dateCreated;
-        this.dateUpdated = dateUpdated;
-        this.shippingAddress = shippingAddress;
-        this.billingAddress = billingAddress;
     }
 
     public Long getId() {
@@ -64,38 +61,6 @@ public class Order {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Address getShippingAddress() {
-        return shippingAddress;
-    }
-
-    public void setShippingAddress(Address shippingAddress) {
-        this.shippingAddress = shippingAddress;
-    }
-
-    public Address getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(Address billingAddress) {
-        this.billingAddress = billingAddress;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Set<OrderItem> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<OrderItem> orders) {
-        this.orders = orders;
     }
 
     public String getOrderTrackingNumber() {
@@ -144,5 +109,37 @@ public class Order {
 
     public void setDateUpdated(Date dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Address getShippingAddress() {
+        return shippingAddress;
+    }
+
+    public void setShippingAddress(Address shippingAddress) {
+        this.shippingAddress = shippingAddress;
+    }
+
+    public Address getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(Address billingAddress) {
+        this.billingAddress = billingAddress;
     }
 }
