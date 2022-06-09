@@ -11,6 +11,7 @@ import pl.project.wwsis.ecommerceshop.model.OrderItem;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -40,6 +41,12 @@ public class CheckoutServiceImpl implements CheckoutService {
         order.setBillingAddress(purchase.getBillingAddress());
 
         Customer customer = purchase.getCustomer();
+
+        Optional<Customer> customerByEmail = customerRepo.findCustomerByEmail(customer.getEmail());
+        if(customerByEmail.isPresent()){
+            customer = customerByEmail.get();
+        }
+
         customer.add(order);
 
         customerRepo.save(customer);
