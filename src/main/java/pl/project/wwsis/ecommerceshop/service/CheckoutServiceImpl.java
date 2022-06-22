@@ -18,7 +18,6 @@ import java.util.UUID;
 @Service
 public class CheckoutServiceImpl implements CheckoutService {
     private CustomerRepo customerRepo;
-
     @Autowired
     public CheckoutServiceImpl(CustomerRepo customerRepo) {
         this.customerRepo = customerRepo;

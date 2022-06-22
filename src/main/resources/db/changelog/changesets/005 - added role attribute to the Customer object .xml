@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="005.1" author="Tomek ">
+        <addColumn tableName="customer">
+            <column name="authorities" type="VARCHAR(255)"/>
+            <column name="customer_id" type="VARCHAR(255)"/>
+            <column name="role" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="005.2" author="Tomek ">
+        <dropColumn columnName="unit_price" tableName="product"/>
+    </changeSet>
+    <changeSet id="005.3" author="Tomek ">
+        <addColumn tableName="product">
+            <column name="unit_price" type="DECIMAL(10,2)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

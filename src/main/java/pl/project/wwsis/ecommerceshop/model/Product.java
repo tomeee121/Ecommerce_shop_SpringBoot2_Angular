@@ -22,6 +22,7 @@ public class Product {
     private String sku;
     private String name;
     private String description;
+    @Column(name = "unit_price", columnDefinition="DECIMAL(10,2)")
     private BigDecimal unitPrice;
     private String imageUrl;
     private boolean active;

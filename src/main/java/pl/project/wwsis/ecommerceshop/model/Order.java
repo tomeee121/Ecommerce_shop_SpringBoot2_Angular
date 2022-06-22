@@ -27,7 +27,7 @@ public class Order {
     private Date dateUpdated;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems = new HashSet<>();
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
     @OneToOne(cascade = CascadeType.ALL)
