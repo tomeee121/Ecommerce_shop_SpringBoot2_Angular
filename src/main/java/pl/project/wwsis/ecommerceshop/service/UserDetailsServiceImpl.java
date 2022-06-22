@@ -18,8 +18,10 @@ import pl.project.wwsis.ecommerceshop.exception.UsernameExistException;
 import pl.project.wwsis.ecommerceshop.model.Customer;
 import pl.project.wwsis.ecommerceshop.model.CustomerPrincipal;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import static pl.project.wwsis.ecommerceshop.constant.UserServiceImpConstants.*;
 
@@ -29,24 +31,40 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
     private Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     private CustomerRepo customerRepo;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private LoginAttemptService loginAttemptService;
 
-    public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService) {
         this.customerRepo = customerRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if(username == null){
+        Optional<Customer> customer = customerRepo.findCustomerByUsername(username);
+        if(!customer.isPresent()){
             logger.error("no username given");
             throw new UsernameNotFoundException("User not found by username "+username);
         }
-        Optional<Customer> customer = customerRepo.findCustomerByUsername(username);
+        validateLoginAttempt(customer.get());
         CustomerPrincipal customerPrincipal = null;
         if(customer.isPresent()){
             customerPrincipal = new CustomerPrincipal(customer.get());
         }
         return customerPrincipal;
+    }
+
+    private void validateLoginAttempt(Customer customer) {
+        if (customer.isNotLocked()) {
+            if (loginAttemptService.ifHasExceededMaxAmountOfLoginAttemps(customer.getUsername())) {
+                customer.setNotLocked(false);
+            } else {
+                customer.setNotLocked(true);
+            }
+        } else {
+            loginAttemptService.evictUserFromLoginAttemptCache(customer.getUsername());
+        }
     }
 
     @Override
