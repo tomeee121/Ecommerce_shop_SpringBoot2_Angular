@@ -20,6 +20,8 @@ import pl.project.wwsis.ecommerceshop.model.CustomerPrincipal;
 import pl.project.wwsis.ecommerceshop.service.CustomerService;
 import pl.project.wwsis.ecommerceshop.utility.JWTTokenProvider;
 
+import javax.mail.MessagingException;
+
 @RestController
 @RequestMapping(value = "/user")
 public class CustomerController extends ExceptionHandling {
@@ -37,7 +39,7 @@ public class CustomerController extends ExceptionHandling {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Customer> register(@RequestBody Customer customer) throws UserNotFoundException, EmailExistException, UsernameExistException {
+    public ResponseEntity<Customer> register(@RequestBody Customer customer) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
         Customer customerSaved = customerService.register(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getUsername());
         return new ResponseEntity<Customer>(customerSaved, HttpStatus.CREATED);
     }

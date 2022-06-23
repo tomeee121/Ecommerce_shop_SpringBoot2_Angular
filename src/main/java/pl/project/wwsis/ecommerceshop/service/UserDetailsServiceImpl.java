@@ -18,6 +18,7 @@ import pl.project.wwsis.ecommerceshop.exception.UsernameExistException;
 import pl.project.wwsis.ecommerceshop.model.Customer;
 import pl.project.wwsis.ecommerceshop.model.CustomerPrincipal;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -32,11 +33,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
     private CustomerRepo customerRepo;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private LoginAttemptService loginAttemptService;
+    private MailSenderBean mailSender;
 
-    public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService) {
+    public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService,
+                                  MailSenderBean mailSender) {
         this.customerRepo = customerRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
+        this.mailSender = mailSender;
     }
 
     @Override
@@ -68,7 +72,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
     }
 
     @Override
-    public Customer register(String firstName, String lastName, String email, String username) throws UserNotFoundException, EmailExistException, UsernameExistException {
+    public Customer register(String firstName, String lastName, String email, String username) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
         validateNewUsernameAndPassword(StringUtils.EMPTY, username, email);
         Customer customer = new Customer();
         customer.setCustomerId(generateCustomerId());
@@ -87,6 +91,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
         customer.setImageUrl(getTemporaryImageUrl());
         customerRepo.save(customer);
         logger.info("password is: "+ password);
+        mailSender.sendEmail(firstName, password, email);
         return customer;
     }
 
