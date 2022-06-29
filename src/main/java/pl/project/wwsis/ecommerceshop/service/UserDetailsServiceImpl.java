@@ -9,8 +9,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.project.wwsis.ecommerceshop.DAO.CustomerRepo;
+import pl.project.wwsis.ecommerceshop.constant.FileConstant;
 import pl.project.wwsis.ecommerceshop.enums.Role;
 import pl.project.wwsis.ecommerceshop.exception.EmailExistException;
 import pl.project.wwsis.ecommerceshop.exception.UserNotFoundException;
@@ -20,14 +22,20 @@ import pl.project.wwsis.ecommerceshop.model.CustomerPrincipal;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static pl.project.wwsis.ecommerceshop.constant.FileConstant.*;
 import static pl.project.wwsis.ecommerceshop.constant.UserServiceImpConstants.*;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService, CustomerService {
+public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     private Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     private CustomerRepo customerRepo;
@@ -88,15 +96,116 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
         customer.setNotLocked(true);
         customer.setRole(Role.ROLE_USER.name());
         customer.setAuthorities(Role.ROLE_USER.getAuthorities());
-        customer.setImageUrl(getTemporaryImageUrl());
+        customer.setImageUrl(getTemporaryImageUrl(username));
         customerRepo.save(customer);
-        logger.info("password is: "+ password);
         mailSender.sendEmail(firstName, password, email);
         return customer;
     }
 
-    private String getTemporaryImageUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().path(USER_IMAGE_PROFILE_TEMP).toUriString();
+    @Override
+    public Customer addNewCustomer(String firstName, String lastName, String username, String email, String role, boolean isActive, boolean isNonLocked, MultipartFile profilImage) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException, IOException {
+        validateNewUsernameAndPassword(StringUtils.EMPTY, username,email);
+        Customer customer = new Customer();
+        customer.setCustomerId(generateCustomerId());
+        String password = generatePassword();
+        String encodedPassword = encodePassword(password);
+        customer.setPassword(encodedPassword);
+        customer.setFirstName(firstName);
+        customer.setLastName(lastName);
+        customer.setEmail(email);
+        customer.setUsername(username);
+        customer.setPassword(encodedPassword);
+        customer.setActive(isActive);
+        customer.setNotLocked(isNonLocked);
+        customer.setRole(getEnumRoleName(role));
+        customer.setAuthorities(getEnumRoleAuthorities(role));
+        if(profilImage == null){
+        customer.setImageUrl(getTemporaryImageUrl(username));}
+        else{
+            customer.setImageUrl(getImageUrl(username));
+        }
+        customerRepo.save(customer);
+        mailSender.sendEmail(firstName, password, email);
+        saveProfileImage(customer, profilImage);
+        return customer;
+    }
+
+    @Override
+    public Customer updateCustomer(String currentUsername, String newFirstName, String newLastName, String newUsername, String newEmail, String newRole, boolean isActive, boolean isNonLocked, MultipartFile newProfilImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException {
+        Customer currentCcustomer = validateNewUsernameAndPassword(currentUsername, newUsername, newEmail);
+        currentCcustomer.setFirstName(newFirstName);
+        currentCcustomer.setLastName(newLastName);
+        currentCcustomer.setEmail(newEmail);
+        currentCcustomer.setUsername(newUsername);
+        currentCcustomer.setActive(isActive);
+        currentCcustomer.setNotLocked(isNonLocked);
+        currentCcustomer.setRole(getEnumRoleName(newRole));
+        currentCcustomer.setAuthorities(getEnumRoleAuthorities(newRole));
+        customerRepo.save(currentCcustomer);
+        saveProfileImage(currentCcustomer, newProfilImage);
+        return currentCcustomer;
+    }
+
+    private String getEnumRoleName(String role) {
+        return Role.valueOf(role).name();
+    }
+
+    private String getEnumRoleAuthorities(String role){
+        return Role.valueOf(role).getAuthorities();
+    }
+
+    @Override
+    public void deleteCustomer(long id) {
+        customerRepo.deleteById(id);
+    }
+
+    @Override
+    public void resetPassword(String email) throws UserNotFoundException, MessagingException {
+        Optional<Customer> customerByEmail = customerRepo.findCustomerByEmail(email);
+        if(!customerByEmail.isPresent()){
+            throw new UserNotFoundException(NO_SUCH_EMAIL+email);
+        }
+        else{
+            String newPassword = generatePassword();
+            String encodedNewPassword = encodePassword(newPassword);
+            customerByEmail.get().setPassword(encodedNewPassword);
+            customerRepo.save(customerByEmail.get());
+            mailSender.sendNewPasswordEmail(customerByEmail.get().getFirstName(), newPassword, customerByEmail.get().getEmail());
+
+        }
+    }
+
+    private void saveProfileImage(Customer customer, MultipartFile profilImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException {
+        Path userFolder = Paths.get(USER_FOLDER).resolve(customer.getUsername()).toAbsolutePath().normalize();
+        if (profilImage != null) {
+            if (!Files.exists(userFolder)) {
+                new File(String.valueOf(userFolder)).mkdirs();
+                Files.copy(profilImage.getInputStream(), userFolder
+                        .resolve(customer.getUsername() + DOT + JPG_EXTENSION), REPLACE_EXISTING);
+            } else {
+                Files.delete(Paths.get(String.valueOf(userFolder.resolve(customer.getUsername() + DOT + JPG_EXTENSION))));
+                Files.copy(profilImage.getInputStream(), userFolder
+                        .resolve(customer.getUsername() + DOT + JPG_EXTENSION), REPLACE_EXISTING);
+
+            }
+        }
+        customer.setImageUrl(getImageUrl(customer.getUsername()));
+        customerRepo.save(customer);
+    }
+
+    private String getImageUrl(String username) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path((USER_IMAGE_PATH + FORWARD_SLASH + username + FORWARD_SLASH + username + DOT + JPG_EXTENSION)).toUriString();
+    }
+
+    @Override
+    public Customer updateProfileImage(String username, MultipartFile picture) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException {
+        Customer customerValidated = validateNewUsernameAndPassword(username, StringUtils.EMPTY, StringUtils.EMPTY);
+        saveProfileImage(customerValidated, picture);
+        return customerValidated;
+    }
+
+    private String getTemporaryImageUrl(String username) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath().path(FileConstant.DEFAULT_USER_IMAGE_PATH+username).toUriString();
     }
 
     private String encodePassword(String password) {
@@ -115,7 +224,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
         Customer customer = null;
         if (StringUtils.isNotBlank(currentUsername)) {
             customer = customerRepo.findCustomerByUsername(currentUsername)
-                    .orElseThrow(() -> new UserNotFoundException("User not found by username: " + currentUsername));
+                    .orElseThrow(() -> new UserNotFoundException(USERNAME_ALREADY_EXISTS + currentUsername));
 
             Optional<Customer> customerByNewUsername = customerRepo.findCustomerByUsername(newUsername);
             if (customerByNewUsername.isPresent()) {
@@ -123,7 +232,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
             }
             Optional<Customer> customerByNewEmail = customerRepo.findCustomerByEmail(email);
             if (customerByNewEmail.isPresent()) {
-                throw new EmailExistException("Email already taken!");
+                throw new EmailExistException(EMAIL_ALREADY_TAKEN);
             }
             return customer;
         }
@@ -139,13 +248,11 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
             return null;
         }
 
-
-
     }
 
     @Override
     public List<Customer> getCustomers() {
-        return customerRepo.findAll();
+        return customerRepo.getCustomersCustomized();
     }
 
     @Override
@@ -166,4 +273,5 @@ public class UserDetailsServiceImpl implements UserDetailsService, CustomerServi
         return null;
 
     }
+
 }

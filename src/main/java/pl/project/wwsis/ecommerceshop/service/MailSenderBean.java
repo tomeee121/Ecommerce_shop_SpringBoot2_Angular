@@ -30,4 +30,13 @@ public class MailSenderBean {
         javaMailSender.send(mimeMessage);
     }
 
+    public void sendNewPasswordEmail(String firstName, String password, String to) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+        mimeMessageHelper.setTo(to);
+        mimeMessageHelper.setSubject(EMAIL_SUBJECT);
+        mimeMessageHelper.setText("Hello "+firstName+" by the Ecommerce shop, <br> Your password has been re-generated to: "+password+", <br> With kind regards - our administration", true);
+        javaMailSender.send(mimeMessage);
+    }
+
 }

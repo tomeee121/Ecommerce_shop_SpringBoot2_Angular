@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ public class JWTTokenProvider {
     public String generateJwtToken(CustomerPrincipal customerPrincipal){
         String[] claims = getClaimsFromCustomer(customerPrincipal);
         String token = JWT.create()
-                .withIssuer(SecurityConstant.TOKEN_PROVIDER).withIssuer(SecurityConstant.ADMINISTRATION).withIssuedAt(new Date())
+                .withIssuer(SecurityConstant.ADMINISTRATION).withIssuedAt(new Date())
                 .withSubject(customerPrincipal.getUsername())
                 .withArrayClaim(SecurityConstant.AUTHORITIES, claims)
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstant.EXPIRATION_TIME))
@@ -71,8 +72,8 @@ public class JWTTokenProvider {
         JWTVerifier jwtVerifier = getJwtVerifier();
         String[] claimsFromToken;
         try{
-        claimsFromToken = jwtVerifier.verify(token).getClaim(SecurityConstant.AUTHORITIES).asArray(String.class);}
-        catch(JWTVerificationException jwtVerificationException){
+            claimsFromToken = jwtVerifier.verify(token).getClaim(SecurityConstant.AUTHORITIES).asArray(String.class);}
+            catch(JWTVerificationException jwtVerificationException){
             throw new JWTVerificationException(SecurityConstant.TOKEN_COULD_NOT_BE_VERIFIED);
         }
         return claimsFromToken;
@@ -81,7 +82,7 @@ public class JWTTokenProvider {
     private JWTVerifier getJwtVerifier(){
         JWTVerifier jwtVerifier;
         try{
-            jwtVerifier = JWT.require(Algorithm.HMAC512(secret)).withIssuer(SecurityConstant.TOKEN_PROVIDER).build();}
+            jwtVerifier = JWT.require(Algorithm.HMAC512(secret)).withIssuer(SecurityConstant.ADMINISTRATION).build();}
         catch(JWTVerificationException jwtVerificationException){
             throw new JWTVerificationException(SecurityConstant.TOKEN_COULD_NOT_BE_VERIFIED);
         }

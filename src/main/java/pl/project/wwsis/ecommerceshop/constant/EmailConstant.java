@@ -9,5 +9,7 @@ public class EmailConstant{
     public static final String SMTP_HOST = "mail.host";
     public static final String SMTP_AUTH = "mail.auth";
     public static final String SMTP_PORT = "mail.port";
+    public static final String EMAIL_SENT = "An email with new generated password was sent to: ";
+    public static final String CUSTOMER_DELETED_MESSAGE = "Customer has been succesfully deleted!";
 
 }
