@@ -40,7 +40,7 @@ export class CartDetailsComponent implements OnInit {
     // this.cartService.addToCart(this.product);
 
     this.cartService.cartItems.filter(item2 => item2.id === tempCartItem.id).map(item => item.quantity++);
-
+    this.cartService.calculateCart();
   }
 
   decreaseAmount(tempCartItem: CartItem){
@@ -50,6 +50,7 @@ export class CartDetailsComponent implements OnInit {
       // //call method that change reactive field quantity & total price of type Subject to recalculate it after decrease and then emit back
       // this.cartService.decreaseAmountOfItemInCart(this.product);
       this.cartService.cartItems.filter(item2 => item2.id === tempCartItem.id).map(item => item.quantity--);
+      this.cartService.calculateCart();
     }
   }
 

@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../services/product.service";
 import {Product} from "../../common/product";
 import {ActivatedRoute} from "@angular/router";
 import {CartService} from "../../services/cart.service";
-import {SearchComponent} from "../search/search.component";
 
 
 @Component({

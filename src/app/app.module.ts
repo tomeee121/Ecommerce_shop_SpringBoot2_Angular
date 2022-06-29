@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import {HttpClientModule} from "@angular/common/http";
 import {ProductService} from "./services/product.service";
-import {RouterModule, Routes} from "@angular/router";
+import {Router, RouterModule, Routes} from "@angular/router";
 import { ProductCategoryMenuComponent } from './components/product-category-menu/product-category-menu.component';
 import { SearchComponent } from './components/search/search.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
@@ -16,6 +16,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { CheckoutComponent } from './components/checkout/checkout.component';
 
 const routes: Routes = [
+
   {path: 'checkout', component: CheckoutComponent},
   {path: 'cart-details', component: CartDetailsComponent},
   {path: 'products/:id', component: ProductDetailsComponent},
@@ -35,7 +36,7 @@ const routes: Routes = [
     ProductDetailsComponent,
     CartStatusComponent,
     CartDetailsComponent,
-    CheckoutComponent
+    CheckoutComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),
