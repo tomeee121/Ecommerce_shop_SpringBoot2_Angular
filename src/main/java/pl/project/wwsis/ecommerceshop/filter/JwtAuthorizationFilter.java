@@ -33,6 +33,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             response.setStatus(HttpStatus.OK.value());
         }
         else{
+            String path = request.getRequestURI();
+            if (path.startsWith("/api") || path.startsWith("/customer/login") || path.startsWith("/customer/register") ||path.startsWith("/customer/resetPassword/**")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
             String authorizationHeader = request.getHeader(SecurityConstant.AUTHORIZATION);
             if(authorizationHeader == null || !authorizationHeader.startsWith(SecurityConstant.TOKEN_PREFIX)){
                 filterChain.doFilter(request,response);

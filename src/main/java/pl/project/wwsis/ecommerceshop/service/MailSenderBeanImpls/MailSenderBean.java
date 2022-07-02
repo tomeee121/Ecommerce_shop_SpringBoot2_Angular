@@ -1,4 +1,4 @@
-package pl.project.wwsis.ecommerceshop.service;
+package pl.project.wwsis.ecommerceshop.service.MailSenderBeanImpls;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,19 +14,22 @@ import javax.mail.internet.MimeMessage;
 import static pl.project.wwsis.ecommerceshop.constant.EmailConstant.EMAIL_SUBJECT;
 
 @Service
-public class MailSenderBean {
+public abstract class MailSenderBean {
 
     @Autowired
     private JavaMailSender javaMailSender;
     Logger logger = LoggerFactory.getLogger(MailSender.class);
 
+    abstract String getInfoAboutAuthoritiesForEmail();
+
 
     public void sendEmail(String firstName, String password, String to) throws MessagingException {
+        String infoAboutAuthoritiesForEmail = getInfoAboutAuthoritiesForEmail();
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
         mimeMessageHelper.setTo(to);
         mimeMessageHelper.setSubject(EMAIL_SUBJECT);
-        mimeMessageHelper.setText("Hello "+firstName+" by the Ecommerce shop, <br> We would like to pass you the password for our website: "+password+", <br> With kind regards - our administration", true);
+        mimeMessageHelper.setText("Hello "+firstName+" by the Ecommerce shop, <br>"+infoAboutAuthoritiesForEmail+ "<br> We would like to pass you the password for our website: "+password+", <br> With kind regards - our administration", true);
         javaMailSender.send(mimeMessage);
     }
 

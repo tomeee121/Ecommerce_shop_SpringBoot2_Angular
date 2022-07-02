@@ -19,6 +19,7 @@ import pl.project.wwsis.ecommerceshop.exception.UserNotFoundException;
 import pl.project.wwsis.ecommerceshop.exception.UsernameExistException;
 import pl.project.wwsis.ecommerceshop.model.Customer;
 import pl.project.wwsis.ecommerceshop.model.CustomerPrincipal;
+import pl.project.wwsis.ecommerceshop.service.MailSenderBeanImpls.*;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
@@ -41,14 +42,24 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     private CustomerRepo customerRepo;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private LoginAttemptService loginAttemptService;
-    private MailSenderBean mailSender;
+    private MailSenderBeanForNormalUser mailSenderForNormalUser;
+    private MailSenderBeanForHR mailSenderForHR;
+    private MailSenderBeanForManager mailSenderForManager;
+    private MailSenderBeanForSuperAdmin mailSenderForSuperAdmin;
+    private MailSenderBeanForAdmin mailSenderForAdmin;
 
-    public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService,
-                                  MailSenderBean mailSender) {
+
+    public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService
+            , MailSenderBeanForNormalUser mailSenderForNormalUser, MailSenderBeanForHR mailSenderForHR, MailSenderBeanForManager mailSenderForManager
+            , MailSenderBeanForSuperAdmin mailSenderForSuperAdmin, MailSenderBeanForAdmin mailSenderForAdmin) {
         this.customerRepo = customerRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
-        this.mailSender = mailSender;
+        this.mailSenderForNormalUser = mailSenderForNormalUser;
+        this.mailSenderForHR = mailSenderForHR;
+        this.mailSenderForManager = mailSenderForManager;
+        this.mailSenderForSuperAdmin = mailSenderForSuperAdmin;
+        this.mailSenderForAdmin = mailSenderForAdmin;
     }
 
     @Override
@@ -98,7 +109,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         customer.setAuthorities(Role.ROLE_USER.getAuthorities());
         customer.setImageUrl(getTemporaryImageUrl(username));
         customerRepo.save(customer);
-        mailSender.sendEmail(firstName, password, email);
+        mailSenderForNormalUser.sendEmail(firstName, password, email);
         return customer;
     }
 
@@ -125,9 +136,25 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             customer.setImageUrl(getImageUrl(username));
         }
         customerRepo.save(customer);
-        mailSender.sendEmail(firstName, password, email);
+
+        customizedEmailSender(role, password, email, firstName);
         saveProfileImage(customer, profilImage);
         return customer;
+    }
+
+    public void customizedEmailSender(String role, String password, String email, String firstName) throws MessagingException {
+        switch (role){
+            case "ROLE_USER": mailSenderForNormalUser.sendEmail(firstName, password, email);
+            break;
+            case "ROLE_ADMIN": mailSenderForAdmin.sendEmail(firstName, password, email);
+            break;
+            case "ROLE_MANAGER": mailSenderForManager.sendEmail(firstName, password, email);
+            break;
+            case "ROLE_SUPER_ADMIN": mailSenderForSuperAdmin.sendEmail(firstName, password, email);
+            break;
+            case "ROLE_HR": mailSenderForHR.sendEmail(firstName, password, email);
+            break;
+        }
     }
 
     @Override
@@ -170,7 +197,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
             String encodedNewPassword = encodePassword(newPassword);
             customerByEmail.get().setPassword(encodedNewPassword);
             customerRepo.save(customerByEmail.get());
-            mailSender.sendNewPasswordEmail(customerByEmail.get().getFirstName(), newPassword, customerByEmail.get().getEmail());
+            mailSenderForNormalUser.sendNewPasswordEmail(customerByEmail.get().getFirstName(), newPassword, customerByEmail.get().getEmail());
 
         }
     }

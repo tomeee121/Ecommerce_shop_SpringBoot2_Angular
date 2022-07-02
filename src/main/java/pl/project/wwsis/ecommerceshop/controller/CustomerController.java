@@ -3,6 +3,7 @@ package pl.project.wwsis.ecommerceshop.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,6 +39,7 @@ import static pl.project.wwsis.ecommerceshop.constant.SecurityConstant.TOKEN_PRE
 
 @RestController
 @RequestMapping("/customer")
+@CrossOrigin("http://localhost:4200")
 public class CustomerController extends ExceptionHandling {
 
     private UserService userService;
@@ -65,10 +67,10 @@ public class CustomerController extends ExceptionHandling {
         CustomerPrincipal customerPrincipal = new CustomerPrincipal(customerByUsername);
         HttpHeaders httpHeaders = getJwtHeaders(customerPrincipal);
         return new ResponseEntity<>(customerByUsername, httpHeaders, HttpStatus.ACCEPTED);
-
     }
 
-    @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('user:create')")
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Customer> addNewCustomer(@RequestParam("firstName") String firstName,
                                                    @RequestParam("lastName") String lastName,
                                                    @RequestParam("username") String username,
@@ -82,6 +84,7 @@ public class CustomerController extends ExceptionHandling {
     }
 
     @PostMapping("/update")
+    @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:4200"})
     public ResponseEntity<Customer> updateCustomer(@RequestParam("currentUsername") String currentUsername,
                                                    @RequestParam("firstName") String firstName,
                                                    @RequestParam("lastName") String lastName,
