@@ -73,7 +73,19 @@ public class SecurityConfig {
         corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token",
                 "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
         corsConfiguration.setAllowedMethods(Arrays.asList("POST", "PUT", "DELETE", "GET", "OPTIONS"));
+
+        CorsConfiguration apiCorsConfiguration = new CorsConfiguration();
+        apiCorsConfiguration.setAllowCredentials(true);
+        apiCorsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        apiCorsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
+                "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
+                "Access-Control-Request-Method","Access-Control-Request-Headers"));
+        apiCorsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token",
+                "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+        apiCorsConfiguration.setAllowedMethods(Arrays.asList("GET", "OPTIONS"));
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/api/**", apiCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/customer/**", corsConfiguration);
+
 
         CorsFilter corsFilter = new CorsFilter(urlBasedCorsConfigurationSource);
         return corsFilter;
