@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Customer} from "../common/customer";
 import {User} from "../common/user";
 import {JwtHelperService} from "@auth0/angular-jwt";
+import {NotificationService} from "./notification.service";
+import {NotificationType} from "../enum/notification-type.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class AuthenticationService {
   private loggedInUsername: any;
   private jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
   login(user: User): Observable<HttpResponse<User> | HttpErrorResponse>{
     // @ts-ignore

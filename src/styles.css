@@ -3,6 +3,8 @@
  * Common CSS
  * ----------------------------
  */
+@import "~angular-notifier/styles";
+
 
 *{
   margin:0;

@@ -36,18 +36,15 @@ export class Login2Component implements OnInit,OnDestroy {
     this.subscriptions.push(this.authenticationService.login(user).subscribe((response: HttpResponse<User>) =>{
         console.log('back to angular')
 
+        this.notificationService.notify(NotificationType.SUCCESS, "Logged in successfully!")
         const token = response.headers.get('Jwt-Token');
-        console.log('token gete d')
         // @ts-ignore
         this.authenticationService.saveToken(token);
-        console.log('token saved')
         // @ts-ignore
         this.authenticationService.addUserToLocalCache(response.body);
-        console.log('user to local cache  ')
         this.router.navigateByUrl("/user/management");
       },
-      // @ts-ignore
-      (error: HttpErrorResponse) => this.notificationService.notify(NotificationType.ERROR, error.message)));
+      (error: HttpErrorResponse) => this.notificationService.notify(NotificationType.ERROR, error.error.message)));
   }
 
   ngOnDestroy(): void {

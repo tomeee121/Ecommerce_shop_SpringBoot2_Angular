@@ -21,12 +21,13 @@ import {CheckoutServiceService} from "./services/checkout-service.service";
 import {ShopFormService} from "./services/shop-form.service";
 import {UserService} from "./services/user.service";
 import {AuthInterceptor} from "./interceptor/auth.interceptor";
-import {NotifierModule} from "angular-notifier";
 import {NotificationService} from "./services/notification.service";
-import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UserComponent } from './components/user/user.component';
 import { Login2Component } from './components/login2/login2.component';
+import {NotificationModule} from "./notification.module";
+import {NotifierModule, NotifierOptions} from "angular-notifier";
+
 
 const routes: Routes = [
 
@@ -43,6 +44,7 @@ const routes: Routes = [
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: '**', redirectTo: '/products', pathMatch: 'full'}
 ];
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,10 +55,9 @@ const routes: Routes = [
     CartStatusComponent,
     CartDetailsComponent,
     CheckoutComponent,
-    LoginComponent,
     RegisterComponent,
     UserComponent,
-    Login2Component,
+    Login2Component
   ],
     imports: [
         RouterModule.forRoot(routes),
@@ -68,7 +69,7 @@ const routes: Routes = [
         NotifierModule
     ],
   // @ts-ignore
-  providers: [AuthenticationGuard, AuthenticationService,ProductService, CartService, CheckoutServiceService, ShopFormService, UserService,NotificationService,
+  providers: [AuthenticationGuard, AuthenticationService,ProductService, CartService, CheckoutServiceService, ShopFormService, UserService, NotificationService,
               ,{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
