@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import {User} from "../common/user";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {NotificationService} from "./notification.service";
@@ -16,6 +16,7 @@ export class AuthenticationService {
   private token: any;
   private loggedInUsername: any;
   private jwtHelper = new JwtHelperService();
+  loginBehaviourSubject = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
@@ -34,6 +35,7 @@ export class AuthenticationService {
     localStorage.removeItem('user');
     localStorage.removeItem('users');
     localStorage.removeItem('token');
+    this.loginBehaviourSubject.next(false);
   }
 
   saveToken(token: string): void{

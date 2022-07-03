@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CartItem} from "../common/cart-item";
 import {BehaviorSubject, Subject} from "rxjs";
 import {Product} from "../common/product";
+import {NotificationService} from "./notification.service";
+import {NotificationType} from "../enum/notification-type.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +11,12 @@ import {Product} from "../common/product";
 export class CartService {
 
   cartItems: CartItem[] = [];
-  totalPrice: Subject<number> = new BehaviorSubject<number>(0);
-  totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
+  totalPrice: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  totalQuantity: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   storage: Storage = sessionStorage;
 
-  constructor() {
+  constructor(private notificationService:NotificationService) {
     //read data from storage
     // @ts-ignore
     let data = JSON.parse(this.storage.getItem('cartItems'));
@@ -52,6 +54,7 @@ export class CartService {
       this.cartItems.push(cartItem);
     }
     this.calculateCart();
+    this.notificationService.notify(NotificationType.SUCCESS, 'Item added to the cart!');
   }
 
   decreaseAmountOfItemInCart(product: Product){
@@ -84,12 +87,15 @@ export class CartService {
     this.totalPrice.next(totalAmountOfMoneyCalculated);
 
     this.persistCartItems();
+    console.log(this.cartItems)
   }
 
   remove(cartItem: CartItem){
     let index: number = this.cartItems.findIndex(tempCartItem => tempCartItem.id === cartItem.id);
     this.cartItems.splice(index, 1);
     this.calculateCart();
+    this.notificationService.notify(NotificationType.SUCCESS, 'Item removed from the cart!');
+
   }
 
   persistCartItems(){

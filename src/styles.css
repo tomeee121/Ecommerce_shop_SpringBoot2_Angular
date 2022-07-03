@@ -242,15 +242,15 @@ input.au-input.au-input-xl{
 }
 
 .cart-area.d-n{
-  display:block
+  display:inline-block;
 }
 
 .cart-area i{
   font-size:22px;
-  float:left;
-  margin-top:16px;
   color:#fff;
-  margin-left:15px
+  position: fixed;
+  right: 13px;
+  top:19px;
 }
 
 .total{
@@ -259,9 +259,10 @@ input.au-input.au-input-xl{
   color:#fff;
   border-radius:30px;
   border:1px solid #0da8e4;
-  float:left;
-  margin-top:7px;
-  padding-left:17px
+  text-align: center;
+  margin-top:9px;
+  padding-left:12px;
+  padding-right:12px;
 }
 
 .total span{
@@ -892,7 +893,7 @@ footer ul li{
     padding-bottom:100px
   }
   .cart-area.d-n{
-    display:none
+    display:inline-block;
   }
   .form-header{
     -webkit-box-pack:center;
@@ -1040,7 +1041,7 @@ footer ul li{
     display:block
   }
   .cart-area.d-n{
-    display:none
+    display:inline-block;
   }
   .cart-area i{
     font-size:18px;
@@ -1064,9 +1065,11 @@ footer ul li{
     color:#fff;
     border-radius:30px;
     border:1px solid #205b8d;
-    float:left;
+    text-align: center;
     margin-top:9px;
-    padding-left:12px
+    padding-left:12px;
+    padding-right:12px;
+
   }
   .header-mobile .header-mobile-bar{
     padding:6px 0;

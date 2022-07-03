@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {CartService} from "../../services/cart.service";
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
   selector: 'app-cart-status',
@@ -10,18 +11,27 @@ export class CartStatusComponent implements OnInit {
 
   cartItemsQuantity: number = 0;
   cartItemsAmountOfMoney: number = 0;
+  isLoggedIn: boolean = false;
+  firstName: string | undefined;
 
-  constructor(private cartService: CartService) { }
+  constructor(private cartService: CartService, private authenticationService:AuthenticationService) { }
 
   ngOnInit(): void {
-    this.subscribeDataForCartItem();
+    this.subscribeQuantityDataForCartItem();
+    this.subscribeAmountDataForCartItem();
+    this.authenticationService.loginBehaviourSubject.subscribe(data => this.isLoggedIn = data);
+    this.firstName = this.authenticationService.getUserFromLocalCache().firstName;
   }
 
-  subscribeDataForCartItem(){
+  subscribeQuantityDataForCartItem(){
     this.cartService.totalQuantity.subscribe(data => this.cartItemsQuantity=data);
-    this.cartService.totalPrice.subscribe(data => this.cartItemsAmountOfMoney=data);
+  }
+  subscribeAmountDataForCartItem(){
+    this.cartService.totalPrice.subscribe(data2 => this.cartItemsAmountOfMoney=data2);
   }
 
 
-
+  logout() {
+    this.authenticationService.logout();
+  }
 }
