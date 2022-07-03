@@ -1,5 +1,7 @@
 package pl.project.wwsis.ecommerceshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,7 @@ public class Address {
     private String street;
     @OneToOne
     @PrimaryKeyJoinColumn
+    @JsonIgnore
     private Order order;
 
     public Address() {

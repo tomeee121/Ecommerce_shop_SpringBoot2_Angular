@@ -4,6 +4,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.project.wwsis.ecommerceshop.DAO.CustomerRepo;
+import pl.project.wwsis.ecommerceshop.DAO.OrderRepo;
+import pl.project.wwsis.ecommerceshop.DTO.OrderHistoryDTO;
 import pl.project.wwsis.ecommerceshop.constant.FileConstant;
 import pl.project.wwsis.ecommerceshop.enums.Role;
 import pl.project.wwsis.ecommerceshop.exception.EmailExistException;
@@ -19,6 +23,7 @@ import pl.project.wwsis.ecommerceshop.exception.UserNotFoundException;
 import pl.project.wwsis.ecommerceshop.exception.UsernameExistException;
 import pl.project.wwsis.ecommerceshop.model.Customer;
 import pl.project.wwsis.ecommerceshop.model.CustomerPrincipal;
+import pl.project.wwsis.ecommerceshop.model.Order;
 import pl.project.wwsis.ecommerceshop.service.MailSenderBeanImpls.*;
 
 import javax.mail.MessagingException;
@@ -30,6 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import static pl.project.wwsis.ecommerceshop.constant.FileConstant.*;
@@ -47,11 +53,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     private MailSenderBeanForManager mailSenderForManager;
     private MailSenderBeanForSuperAdmin mailSenderForSuperAdmin;
     private MailSenderBeanForAdmin mailSenderForAdmin;
+    private OrderRepo orderRepo;
 
 
     public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService
             , MailSenderBeanForNormalUser mailSenderForNormalUser, MailSenderBeanForHR mailSenderForHR, MailSenderBeanForManager mailSenderForManager
-            , MailSenderBeanForSuperAdmin mailSenderForSuperAdmin, MailSenderBeanForAdmin mailSenderForAdmin) {
+            , MailSenderBeanForSuperAdmin mailSenderForSuperAdmin, MailSenderBeanForAdmin mailSenderForAdmin, OrderRepo orderRepo) {
         this.customerRepo = customerRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
@@ -60,6 +67,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         this.mailSenderForManager = mailSenderForManager;
         this.mailSenderForSuperAdmin = mailSenderForSuperAdmin;
         this.mailSenderForAdmin = mailSenderForAdmin;
+        this.orderRepo = orderRepo;
     }
 
     @Override
@@ -231,6 +239,22 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         return customerValidated;
     }
 
+    @Override
+    public List<OrderHistoryDTO> getShoppingHistory(String email, int page, int size) {
+        List<Order> ordersByEmail = orderRepo.findOrdersByEmail(email, PageRequest.of(page, size));
+        List<OrderHistoryDTO> orderHistoryDTOS = mapOrderToDTO(ordersByEmail);
+        return orderHistoryDTOS;
+    }
+
+    private List<OrderHistoryDTO> mapOrderToDTO(List<Order> ordersByEmail) {
+        List<OrderHistoryDTO> ordersByEmailDTO = ordersByEmail.stream().map(order -> new OrderHistoryDTO(order.getOrderTrackingNumber(), order.getTotalQuantity(),
+                        order.getStatus(), order.getDateCreated(), order.getDateUpdated(), order.getShippingAddress().getCountry(),
+                        order.getShippingAddress().getZipCode(), order.getShippingAddress().getCity(), order.getShippingAddress().getState(),
+                        order.getShippingAddress().getStreet()))
+                        .collect(Collectors.toList());
+        return ordersByEmailDTO;
+    }
+
     private String getTemporaryImageUrl(String username) {
         return ServletUriComponentsBuilder.fromCurrentContextPath().path(FileConstant.DEFAULT_USER_IMAGE_PATH+username).toUriString();
     }
@@ -286,7 +310,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public Customer findByUsername(String username) {
         Optional<Customer> customerByUsername = customerRepo.findCustomerByUsername(username);
         if(customerByUsername.isPresent()){
-            return customerByUsername.get();
+            Customer customer = new Customer(customerByUsername.get().getId(), customerByUsername.get().getCustomerId(), customerByUsername.get().getFirstName(),
+                    customerByUsername.get().getLastName(), customerByUsername.get().getEmail(), customerByUsername.get().getUsername(),
+                    customerByUsername.get().getPassword(), customerByUsername.get().getImageUrl(),
+                    customerByUsername.get().getRole(), customerByUsername.get().getAuthorities(),
+                    customerByUsername.get().isActive(), customerByUsername.get().isNotLocked());
+            return customer;
         }
         return null;
     }

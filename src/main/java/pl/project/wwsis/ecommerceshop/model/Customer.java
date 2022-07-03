@@ -21,8 +21,9 @@ public class Customer {
     private String authorities;
     private boolean isActive;
     private boolean isNotLocked;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     Set<Order> orders = new HashSet<>();
+
 
     public void add(Order order){
         if(order!=null){
@@ -38,6 +39,21 @@ public class Customer {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+    }
+
+    public Customer(Long id, String customerId, String firstName, String lastName, String email, String username, String password, String imageUrl, String role, String authorities, boolean isActive, boolean isNotLocked) {
+        this.id = id;
+        this.customerId = customerId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.imageUrl = imageUrl;
+        this.role = role;
+        this.authorities = authorities;
+        this.isActive = isActive;
+        this.isNotLocked = isNotLocked;
     }
 
     public Long getId() {

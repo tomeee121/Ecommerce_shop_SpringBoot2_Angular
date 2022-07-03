@@ -1,5 +1,7 @@
 package pl.project.wwsis.ecommerceshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -15,6 +17,7 @@ public class OrderItem {
     private int quantity;
     private Long productId;
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "order_id")
     private Order order;
 

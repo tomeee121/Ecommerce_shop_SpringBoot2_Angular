@@ -16,4 +16,5 @@ public interface CustomerRepo extends JpaRepository<Customer, Long> {
     Optional<Customer> findCustomerByUsername(String username);
     @Query(value = "SELECT * from customer c ORDER BY c.id", nativeQuery = true)
     List<Customer> getCustomersCustomized();
+
 }

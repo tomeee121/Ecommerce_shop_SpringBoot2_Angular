@@ -1,10 +1,14 @@
 package pl.project.wwsis.ecommerceshop.service;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+import pl.project.wwsis.ecommerceshop.DTO.OrderHistoryDTO;
 import pl.project.wwsis.ecommerceshop.exception.EmailExistException;
 import pl.project.wwsis.ecommerceshop.exception.UserNotFoundException;
 import pl.project.wwsis.ecommerceshop.exception.UsernameExistException;
 import pl.project.wwsis.ecommerceshop.model.Customer;
+import pl.project.wwsis.ecommerceshop.model.Order;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -21,4 +25,5 @@ public interface UserService {
     void deleteCustomer(long id);
     void resetPassword(String email) throws UserNotFoundException, MessagingException;
     Customer updateProfileImage(String username, MultipartFile picture) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException;
+    List<OrderHistoryDTO> getShoppingHistory(String email, int page, int size);
 }

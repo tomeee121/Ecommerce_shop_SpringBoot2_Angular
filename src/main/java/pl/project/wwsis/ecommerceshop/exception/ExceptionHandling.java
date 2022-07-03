@@ -97,11 +97,11 @@ public class ExceptionHandling {
         return httpResponse;
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception){
-        ResponseEntity<HttpResponse> httpResponse = createHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG.toUpperCase());
-        return httpResponse;
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<HttpResponse> internalServerErrorException(Exception exception){
+//        ResponseEntity<HttpResponse> httpResponse = createHttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR_MSG.toUpperCase());
+//        return httpResponse;
+//    }
     private ResponseEntity<HttpResponse> createHttpResponse(HttpStatus httpStatus, String message){
         HttpResponse httpResponse = new HttpResponse(httpStatus.value(), httpStatus, httpStatus.getReasonPhrase().toUpperCase(), message.toUpperCase());
         return new ResponseEntity<>(httpResponse, httpStatus);

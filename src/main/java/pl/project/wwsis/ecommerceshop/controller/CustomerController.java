@@ -1,6 +1,7 @@
 package pl.project.wwsis.ecommerceshop.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,7 +11,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import pl.project.wwsis.ecommerceshop.DAO.OrderRepo;
 import pl.project.wwsis.ecommerceshop.DTO.HttpResponse;
+import pl.project.wwsis.ecommerceshop.DTO.OrderHistoryDTO;
 import pl.project.wwsis.ecommerceshop.constant.SecurityConstant;
 import pl.project.wwsis.ecommerceshop.exception.EmailExistException;
 import pl.project.wwsis.ecommerceshop.exception.ExceptionHandling;
@@ -18,6 +21,7 @@ import pl.project.wwsis.ecommerceshop.exception.UserNotFoundException;
 import pl.project.wwsis.ecommerceshop.exception.UsernameExistException;
 import pl.project.wwsis.ecommerceshop.model.Customer;
 import pl.project.wwsis.ecommerceshop.model.CustomerPrincipal;
+import pl.project.wwsis.ecommerceshop.model.Order;
 import pl.project.wwsis.ecommerceshop.service.UserService;
 import pl.project.wwsis.ecommerceshop.utility.JWTTokenProvider;
 
@@ -35,7 +39,6 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static pl.project.wwsis.ecommerceshop.constant.EmailConstant.CUSTOMER_DELETED_MESSAGE;
 import static pl.project.wwsis.ecommerceshop.constant.EmailConstant.EMAIL_SENT;
 import static pl.project.wwsis.ecommerceshop.constant.FileConstant.*;
-import static pl.project.wwsis.ecommerceshop.constant.SecurityConstant.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/customer")
@@ -149,6 +152,12 @@ public class CustomerController extends ExceptionHandling {
             byteArrayOutputStream.write(chunk, 0, chunkSize);
         }
         return byteArrayOutputStream.toByteArray();
+    }
+
+    @GetMapping("/shopping-history")
+    public ResponseEntity<List<OrderHistoryDTO>> getShoppingHistory(@RequestParam("email") String email, @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize){
+        List<OrderHistoryDTO> shoppingHistory = userService.getShoppingHistory(email, pageNumber, pageSize);
+        return new ResponseEntity<List<OrderHistoryDTO>>(shoppingHistory, OK);
     }
 
 

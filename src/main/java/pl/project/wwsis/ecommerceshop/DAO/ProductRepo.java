@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
+import pl.project.wwsis.ecommerceshop.model.Order;
 import pl.project.wwsis.ecommerceshop.model.Product;
 
 import java.util.List;
