@@ -13,6 +13,8 @@ import {Address} from "../../common/address";
 import {Router} from "@angular/router";
 import {stringify} from "@angular/compiler/src/util";
 import {isString} from "@ng-bootstrap/ng-bootstrap/util/util";
+import {AuthenticationService} from "../../services/authentication.service";
+import {User} from "../../common/user";
 
 // @ts-ignore
 @Component({
@@ -31,16 +33,25 @@ export class CheckoutComponent implements OnInit {
   creditCardYears: number[] = [];
   countries: Country[] = [];
   states: State[] = [];
+  user: User | undefined;
+  ifLoggedIn: boolean = false;
 
   constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService, private checkoutService: CheckoutServiceService,
-              private router: Router) {}
+              private router: Router, private authenticationService: AuthenticationService) {}
 
   ngOnInit(): void {
+
+    if(this.authenticationService.isLoggedIn()){
+      this.user = this.authenticationService.getUserFromLocalCache()
+      this.ifLoggedIn = true;
+    }
+
+
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
-        lastName: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
-        email: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,4}$'),FormValidators.rejectOnlyWhiteSpace])
+        firstName: new FormControl({value: this.user?.firstName, disabled: this.ifLoggedIn}, [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        lastName: new FormControl({value: this.user?.lastName, disabled: this.ifLoggedIn}, [Validators.required, Validators.minLength(2), FormValidators.rejectOnlyWhiteSpace]),
+        email: new FormControl({value: this.user?.email, disabled: this.ifLoggedIn}, [Validators.required, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]{2,4}$'),FormValidators.rejectOnlyWhiteSpace])
       }),
       shippingAdress: this.formBuilder.group({
         country: new FormControl('', [Validators.required]),
@@ -73,6 +84,7 @@ export class CheckoutComponent implements OnInit {
            this.checkoutFormGroup.get('shippingAdress')?.get('country')?.setValue(data[0])});
     this.getStatesOnInit();
     this.reviewCartTotal();
+
   }
 
   onSubmit(){
@@ -203,4 +215,5 @@ export class CheckoutComponent implements OnInit {
     this.cartService.totalQuantity.subscribe(data => this.totalQuantity = data);
     this.cartService.totalPrice.subscribe(data => this.totalPrice = data);
   }
+
 }

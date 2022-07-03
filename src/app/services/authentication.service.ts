@@ -54,7 +54,7 @@ export class AuthenticationService {
 
   loadToken(): void {
     // @ts-ignore
-    this.token = JSON.parse(localStorage.getItem('token'));
+    this.token = localStorage.getItem('token');
   }
 
   getToken(): any {
@@ -68,6 +68,7 @@ export class AuthenticationService {
       if(this.jwtHelper.decodeToken(this.token).sub != null || ''){
         if(!this.jwtHelper.isTokenExpired(this.token)){
           this.loggedInUsername = this.jwtHelper.decodeToken(this.token).sub;
+          this.loginBehaviourSubject.next(true);
           return true;
         }
       }
