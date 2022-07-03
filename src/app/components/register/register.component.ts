@@ -26,10 +26,6 @@ export class RegisterComponent implements OnInit {
     if(this.authenticationService.isLoggedIn()){
       this.router.navigateByUrl("/user/management")
     }
-    else{
-      this.router.navigateByUrl("/login")
-
-    }
   }
 
   public onRegister(user: User){
