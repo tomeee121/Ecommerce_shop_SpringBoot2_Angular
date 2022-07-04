@@ -13,7 +13,8 @@ import {ProductCategory} from "../common/product-category";
 export class UserService {
 
   private host: string = environment.apiCustomerUrl;
-  private shoppingHistoryUrlBase: string = 'http://localhost:8080/customer/shopping-history';
+  private shoppingHistoryUrlBase: string = environment.shoppingHistoryUrlBase
+  private allShoppingHistoryUrlBase: string = environment.allShoppingHistoryUrlBase
 
 
   constructor(private http: HttpClient) {
@@ -21,6 +22,11 @@ export class UserService {
 
   public getShoppingHistory(email: string, pageNumber: number, pageSize: number): Observable<OrderHistoryDTO[]| HttpErrorResponse> {
     const shoppingHistoryUrl = `${this.shoppingHistoryUrlBase}?email=${email}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    return this.http.get<OrderHistoryDTO[] | HttpErrorResponse>(shoppingHistoryUrl);
+  }
+
+  public getAllShoppingHistory(): Observable<OrderHistoryDTO[]| HttpErrorResponse> {
+    const shoppingHistoryUrl = `${this.allShoppingHistoryUrlBase}`;
     return this.http.get<OrderHistoryDTO[] | HttpErrorResponse>(shoppingHistoryUrl);
   }
 

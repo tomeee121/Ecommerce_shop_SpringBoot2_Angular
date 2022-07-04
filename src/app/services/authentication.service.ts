@@ -79,4 +79,21 @@ export class AuthenticationService {
     }
     return false;
   }
+
+  public isAdmin(): boolean{
+    this.loadToken();
+    if(this.token != null && this.token !== ''){
+      if(this.jwtHelper.decodeToken(this.token).sub != null || ''){
+        if(!this.jwtHelper.isTokenExpired(this.token)){
+          let authorities: string[];
+          authorities = this.jwtHelper.decodeToken(this.token).Authorities;
+          if(authorities.includes('user:create')){
+            return true;
+          }
+        }
+      }
+
+    }
+    return false;
+  }
 }
