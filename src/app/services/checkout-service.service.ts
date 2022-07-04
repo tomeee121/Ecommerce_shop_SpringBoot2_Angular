@@ -13,7 +13,7 @@ import {NotificationType} from "../enum/notification-type.enum";
 })
 export class CheckoutServiceService {
 
-  private purchaseUrl: string = 'http://localhost:8080/api/checkout/purchase';
+  private purchaseUrl: string = 'http://localhost:8080/checkout/purchase';
 
   constructor(private httpClient: HttpClient, private notificationService: NotificationService) { }
 

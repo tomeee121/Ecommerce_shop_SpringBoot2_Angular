@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpEvent} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpEvent, HttpResponse} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User} from "../common/user";
 import {environment} from "../../environments/environment";
 import {CustomHttpResponse} from "../common/custom-http-response";
+import {OrderHistoryDTO} from "../common/OrderHistoryDTO";
+import {ProductCategory} from "../common/product-category";
 
 @Injectable({
   providedIn: 'root'
@@ -11,41 +13,55 @@ import {CustomHttpResponse} from "../common/custom-http-response";
 export class UserService {
 
   private host: string = environment.apiCustomerUrl;
+  private shoppingHistoryUrlBase: string = 'http://localhost:8080/customer/shopping-history';
 
-  constructor(private http: HttpClient) { }
 
-  public getUsers(): Observable<User[] | HttpErrorResponse>{
+  constructor(private http: HttpClient) {
+  }
+
+  public getShoppingHistory(email: string, pageNumber: number, pageSize: number): Observable<OrderHistoryDTO[]| HttpErrorResponse> {
+    const shoppingHistoryUrl = `${this.shoppingHistoryUrlBase}?email=${email}&pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    return this.http.get<OrderHistoryDTO[] | HttpErrorResponse>(shoppingHistoryUrl);
+  }
+
+  public getUsers(): Observable<User[] | HttpErrorResponse> {
     return this.http.get<User[]>(`${this.host}/customer/list`);
   }
 
-  public addUser(formData: FormData): Observable<User | HttpErrorResponse>{
+  public addUser(formData: FormData): Observable<User | HttpErrorResponse> {
     return this.http.post<User>(`${this.host}/customer/add`, formData);
   }
 
-  public resetPassword(email: string): Observable<CustomHttpResponse | HttpErrorResponse>{
+  public resetPassword(email: string): Observable<CustomHttpResponse | HttpErrorResponse> {
     return this.http.get<CustomHttpResponse>(`${this.host}/customer/resetPassword/${email}`);
   }
 
-  public updateProfileImage(formData: FormData): Observable<HttpEvent<any> | HttpErrorResponse>{
+  public updateProfileImage(formData: FormData): Observable<HttpEvent<any> | HttpErrorResponse> {
     return this.http.post<User>(`${this.host}/customer/updateProfileImage`, formData,
-      {observe: "events",
-              reportProgress: true});
+      {
+        observe: "events",
+        reportProgress: true
+      });
   }
-  public deleteUser(userId: number): Observable<CustomHttpResponse | HttpErrorResponse>{
+
+  public deleteUser(userId: number): Observable<CustomHttpResponse | HttpErrorResponse> {
     return this.http.delete<CustomHttpResponse>(`${this.host}/customer/delete/${userId}`);
   }
-  public addUsersToLocalCache(users: User[]): void{
+
+  public addUsersToLocalCache(users: User[]): void {
     localStorage.setItem('users', JSON.stringify(users));
   }
-  public getUsersFromLocalCache(): User[]{
+
+  public getUsersFromLocalCache(): User[] {
     let users: User[] = [];
-    if(localStorage.getItem('users')){
+    if (localStorage.getItem('users')) {
       // @ts-ignore
-      users =  JSON.parse(localStorage.getItem('users'));}
+      users = JSON.parse(localStorage.getItem('users'));
+    }
     return users;
   }
 
-  createUserFormData(loggedInUser: string, user: User, image: File): FormData{
+  createUserFormData(loggedInUser: string, user: User, image: File): FormData {
     const formData = new FormData();
     formData.append('currentUsername', loggedInUser);
     formData.append('firstName', user.firstName);
@@ -58,4 +74,5 @@ export class UserService {
     formData.append('imageUrl', image);
     return formData;
   }
+
 }

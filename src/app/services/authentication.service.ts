@@ -59,7 +59,7 @@ export class AuthenticationService {
 
   getToken(): any {
     // @ts-ignore
-    return JSON.parse(localStorage.getItem('token'));
+    return localStorage.getItem('token');
   }
 
   public isLoggedIn(): boolean{
