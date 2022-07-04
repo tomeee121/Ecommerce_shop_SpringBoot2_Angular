@@ -26,4 +26,5 @@ public interface UserService {
     void resetPassword(String email) throws UserNotFoundException, MessagingException;
     Customer updateProfileImage(String username, MultipartFile picture) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException;
     List<OrderHistoryDTO> getShoppingHistory(String email, int page, int size);
+    List<OrderHistoryDTO> getAllShoppingHistory();
 }

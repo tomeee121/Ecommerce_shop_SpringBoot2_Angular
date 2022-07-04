@@ -160,6 +160,13 @@ public class CustomerController extends ExceptionHandling {
         return new ResponseEntity<List<OrderHistoryDTO>>(shoppingHistory, OK);
     }
 
+    @GetMapping("/all-shopping-history")
+    @PreAuthorize("hasAnyAuthority('user:create')")
+    public ResponseEntity<List<OrderHistoryDTO>> getAllShoppingHistory(){
+        List<OrderHistoryDTO> shoppingHistory = userService.getAllShoppingHistory();
+        return new ResponseEntity<List<OrderHistoryDTO>>(shoppingHistory, OK);
+    }
+
 
     @PostMapping("/updateProfileImage")
     public ResponseEntity<Customer> updateProfileImage(@RequestParam("username") String username, @RequestParam("profilImage") MultipartFile profilImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException {

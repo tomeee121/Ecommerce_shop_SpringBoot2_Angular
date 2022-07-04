@@ -34,7 +34,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         else{
             String path = request.getRequestURI();
-            if (path.startsWith("/api") || path.startsWith("/customer/login") || path.startsWith("/customer/register") ||path.startsWith("/customer/resetPassword/**")) {
+            if (path.startsWith("/api") || path.startsWith("/checkout") || path.startsWith("/customer/login")
+                    || path.startsWith("/customer/register") || path.startsWith("/customer/resetPassword/**"))
+            {
                 filterChain.doFilter(request, response);
                 return;
             }

@@ -7,7 +7,7 @@ import pl.project.wwsis.ecommerceshop.service.CheckoutService;
 
 @CrossOrigin("http://localhost:4200")
 @RestController
-@RequestMapping("/api/checkout")
+@RequestMapping("/checkout")
 public class CheckoutController {
     private CheckoutService checkoutService;
 

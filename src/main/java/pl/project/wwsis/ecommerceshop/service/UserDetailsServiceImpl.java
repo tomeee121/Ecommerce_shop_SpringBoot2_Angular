@@ -246,6 +246,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         return orderHistoryDTOS;
     }
 
+    @Override
+    public List<OrderHistoryDTO> getAllShoppingHistory() {
+        List<Order> allOrders = orderRepo.findAllOrders();
+        List<OrderHistoryDTO> orderHistoryDTOS = mapOrderToDTO(allOrders);
+        return orderHistoryDTOS;
+
+    }
+
     private List<OrderHistoryDTO> mapOrderToDTO(List<Order> ordersByEmail) {
         List<OrderHistoryDTO> ordersByEmailDTO = ordersByEmail.stream().map(order -> new OrderHistoryDTO(order.getOrderTrackingNumber(), order.getTotalQuantity(),
                         order.getStatus(), order.getDateCreated(), order.getDateUpdated(), order.getShippingAddress().getCountry(),

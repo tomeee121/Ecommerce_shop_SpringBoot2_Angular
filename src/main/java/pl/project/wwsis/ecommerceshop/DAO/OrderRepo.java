@@ -17,4 +17,8 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
             "inner join Address a on o.shippingAddress.id = a.id where c.email = :email order by o.dateCreated DESC")
     List<Order> findOrdersByEmail(@Param("email") String email, Pageable pageable);
 
+
+    @Query(value = "SELECT o from Order o inner join Customer c on o.customer.id = c.id " +
+            "inner join Address a on o.shippingAddress.id = a.id order by o.dateCreated DESC")
+    List<Order> findAllOrders();
 }

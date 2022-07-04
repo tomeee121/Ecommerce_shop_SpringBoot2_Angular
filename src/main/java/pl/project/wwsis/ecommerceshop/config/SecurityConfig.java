@@ -83,8 +83,20 @@ public class SecurityConfig {
         apiCorsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token",
                 "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
         apiCorsConfiguration.setAllowedMethods(Arrays.asList("GET", "OPTIONS"));
+
+        CorsConfiguration checkoutCorsConfiguration = new CorsConfiguration();
+        checkoutCorsConfiguration.setAllowCredentials(true);
+        checkoutCorsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        checkoutCorsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
+                "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
+                "Access-Control-Request-Method","Access-Control-Request-Headers"));
+        checkoutCorsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token",
+                "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+        checkoutCorsConfiguration.setAllowedMethods(Arrays.asList("POST", "OPTIONS"));
+
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/api/**", apiCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/customer/**", corsConfiguration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/checkout/**", corsConfiguration);
 
 
         CorsFilter corsFilter = new CorsFilter(urlBasedCorsConfigurationSource);
