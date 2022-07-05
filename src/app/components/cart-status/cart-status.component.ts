@@ -13,14 +13,18 @@ export class CartStatusComponent implements OnInit {
   cartItemsAmountOfMoney: number = 0;
   isLoggedIn: boolean = false;
   firstName: string | undefined;
+  storage: Storage = sessionStorage;
 
   constructor(private cartService: CartService, private authenticationService:AuthenticationService) { }
 
   ngOnInit(): void {
     this.subscribeQuantityDataForCartItem();
     this.subscribeAmountDataForCartItem();
-    this.authenticationService.loginBehaviourSubject.subscribe(data => this.isLoggedIn = data);
-    this.firstName = this.authenticationService.getUserFromLocalCache().firstName;
+
+    this.authenticationService.isLoggedIn();
+    this.authenticationService.loginBehaviourSubject.subscribe(data => {this.isLoggedIn = data})
+    this.authenticationService.nameBehaviourSubject.subscribe(data => this.firstName = data);
+
   }
 
   subscribeQuantityDataForCartItem(){

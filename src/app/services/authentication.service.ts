@@ -14,9 +14,9 @@ export class AuthenticationService {
 
   public host = environment.apiCustomerUrl;
   private token: any;
-  private loggedInUsername: any;
   private jwtHelper = new JwtHelperService();
-  loginBehaviourSubject = new BehaviorSubject<boolean>(false);
+  nameBehaviourSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  loginBehaviourSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private notificationService: NotificationService) { }
 
@@ -31,7 +31,7 @@ export class AuthenticationService {
 
   logout(): void{
     this.token = null;
-    this.loggedInUsername = null;
+    this.nameBehaviourSubject.next('');
     localStorage.removeItem('user');
     localStorage.removeItem('users');
     localStorage.removeItem('token');
@@ -67,7 +67,7 @@ export class AuthenticationService {
     if(this.token != null && this.token !== ''){
       if(this.jwtHelper.decodeToken(this.token).sub != null || ''){
         if(!this.jwtHelper.isTokenExpired(this.token)){
-          this.loggedInUsername = this.jwtHelper.decodeToken(this.token).sub;
+          this.nameBehaviourSubject.next(this.jwtHelper.decodeToken(this.token).sub);
           this.loginBehaviourSubject.next(true);
           return true;
         }

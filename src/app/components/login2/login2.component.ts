@@ -43,7 +43,7 @@ export class Login2Component implements OnInit,OnDestroy {
         // @ts-ignore
         this.authenticationService.addUserToLocalCache(response.body);
         this.router.navigateByUrl("/user/management");
-        this.authenticationService.loginBehaviourSubject.next(true);
+        this.authenticationService.isLoggedIn()
       },
       (error: HttpErrorResponse) => this.notificationService.notify(NotificationType.ERROR, error.error.message)));
   }

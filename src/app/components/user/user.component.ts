@@ -19,7 +19,6 @@ export class UserComponent implements OnInit, OnDestroy {
   shoppingHistory: OrderHistoryDTO[] = [];
   isAdmin: boolean = false;
   private subscriptions: Subscription[] = [];
-  // storage: Storage = sessionStorage;
 
   constructor(private userService:UserService, private authenticationService:AuthenticationService, private notificationService:NotificationService) {}
 
