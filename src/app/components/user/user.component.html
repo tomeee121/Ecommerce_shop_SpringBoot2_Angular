@@ -1,4 +1,4 @@
-<table style="margin-top: 80px;padding: 0px 30px; width: auto"  class="table table-hover">
+<table style="margin-top: 80px;padding: 0px 20px; width: auto; background-color: snow"  class="table table-hover">
   <thead style="margin-top: 80px;padding: 0px 30px; width: auto; text-align: center; vertical-align: middle">
   <tr>
     <th scope="col">Order nr</th>
@@ -12,6 +12,7 @@
     <th scope="col">State</th>
     <th scope="col">City</th>
     <th scope="col">Street</th>
+    <th scope="col">Deleting</th>
   </tr>
   </thead>
   <tbody style="margin-top: 80px;padding: 0px 30px; width: auto; text-align: center; align-content: center; vertical-align: middle" >
@@ -27,6 +28,7 @@
     <td>{{order.state}}</td>
     <td>{{order.city}}</td>
     <td>{{order.street}}</td>
+    <td class="col-1" style="vertical-align: middle; text-align: center"><button type="button" class="btn btn-primary" style="width: 70px; height: 50px;text-align: center; align-items: center; line-height: 20px; vertical-align: middle" [disabled]="!isAdmin" (click)="deleteOrder(order.order_tracking_number)">Delete order</button></td>
   </tr>
   </tbody>
 </table>

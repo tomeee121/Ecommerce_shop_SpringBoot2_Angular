@@ -15,6 +15,7 @@ export class UserService {
   private host: string = environment.apiCustomerUrl;
   private shoppingHistoryUrlBase: string = environment.shoppingHistoryUrlBase
   private allShoppingHistoryUrlBase: string = environment.allShoppingHistoryUrlBase
+  private deleteOrderUrlBase: string = environment.deleteOrderUrlBase
 
 
   constructor(private http: HttpClient) {
@@ -52,6 +53,10 @@ export class UserService {
 
   public deleteUser(userId: number): Observable<CustomHttpResponse | HttpErrorResponse> {
     return this.http.delete<CustomHttpResponse>(`${this.host}/customer/delete/${userId}`);
+  }
+
+  public deleteOrder(order_tracking_number: string): Observable<CustomHttpResponse | HttpErrorResponse>{
+    return this.http.delete<CustomHttpResponse>(`${this.deleteOrderUrlBase}?order_tracking_number=${order_tracking_number}`);
   }
 
   public addUsersToLocalCache(users: User[]): void {
