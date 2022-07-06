@@ -160,11 +160,26 @@ public class CustomerController extends ExceptionHandling {
         return new ResponseEntity<List<OrderHistoryDTO>>(shoppingHistory, OK);
     }
 
+    @DeleteMapping("/deleteOrder")
+    @PreAuthorize("hasAnyAuthority('user:create')")
+    public ResponseEntity<HttpResponse> deleteOrder(@RequestParam("order_tracking_number") String order_tracking_number){
+        userService.deleteOrder(order_tracking_number);
+        return response(OK, "Order deleted successfully!");
+    }
+
+
     @GetMapping("/all-shopping-history")
     @PreAuthorize("hasAnyAuthority('user:create')")
     public ResponseEntity<List<OrderHistoryDTO>> getAllShoppingHistory(){
         List<OrderHistoryDTO> shoppingHistory = userService.getAllShoppingHistory();
         return new ResponseEntity<List<OrderHistoryDTO>>(shoppingHistory, OK);
+    }
+
+    @GetMapping("/updateStatus")
+    @PreAuthorize("hasAnyAuthority('user:create')")
+    public ResponseEntity<HttpResponse> updateOrderStatus(@RequestParam("order_nr") String order_nr, @RequestParam("status") String status){
+        userService.updateOrderStatus(order_nr, status);
+        return response(OK, "Status updated!");
     }
 
 

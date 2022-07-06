@@ -16,12 +16,16 @@ public class OrderItem {
     private BigDecimal unitPrice;
     private int quantity;
     private Long productId;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
     @JoinColumn(name = "order_id")
     private Order order;
 
     public OrderItem() {
+    }
+
+    public void removeRelation(){
+        order.setOrderItems(null);
     }
 
     public OrderItem(String imageUrl, BigDecimal unitPrice, int quantity, Long productId, Order order) {

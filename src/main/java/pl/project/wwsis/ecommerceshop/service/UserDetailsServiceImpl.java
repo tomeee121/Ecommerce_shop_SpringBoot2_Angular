@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -54,7 +54,6 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     private MailSenderBeanForSuperAdmin mailSenderForSuperAdmin;
     private MailSenderBeanForAdmin mailSenderForAdmin;
     private OrderRepo orderRepo;
-
 
     public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService
             , MailSenderBeanForNormalUser mailSenderForNormalUser, MailSenderBeanForHR mailSenderForHR, MailSenderBeanForManager mailSenderForManager
@@ -252,6 +251,29 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         List<OrderHistoryDTO> orderHistoryDTOS = mapOrderToDTO(allOrders);
         return orderHistoryDTOS;
 
+    }
+
+
+    @Transactional
+    @Override
+    public void deleteOrder(String order_tracking_number) {
+        orderRepo.deleteOrderByOrderTracking(order_tracking_number);
+    }
+
+    @Transactional
+    @Override
+    public void updateOrderStatus(String order_nr, String status) {
+        orderRepo.updateOrderStatus(status, order_nr);
+    }
+
+    @Transactional
+    void saveCustomerWithNewOrders(Customer customerByOrderTrackingNumber, Set<Order> orders){
+        Customer customer = new Customer(customerByOrderTrackingNumber.getId(), customerByOrderTrackingNumber.getCustomerId(), customerByOrderTrackingNumber.getFirstName(), customerByOrderTrackingNumber.getLastName()
+                , customerByOrderTrackingNumber.getEmail(), customerByOrderTrackingNumber.getUsername(), customerByOrderTrackingNumber.getPassword(), customerByOrderTrackingNumber.getImageUrl(),
+                customerByOrderTrackingNumber.getRole(), customerByOrderTrackingNumber.getAuthorities(), customerByOrderTrackingNumber.isActive(),
+                customerByOrderTrackingNumber.isNotLocked());
+        customer.setOrders(orders);
+        customerRepo.save(customerByOrderTrackingNumber);
     }
 
     private List<OrderHistoryDTO> mapOrderToDTO(List<Order> ordersByEmail) {

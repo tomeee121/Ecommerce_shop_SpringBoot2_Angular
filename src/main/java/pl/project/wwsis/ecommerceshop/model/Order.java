@@ -9,7 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "order_table")
@@ -32,10 +34,10 @@ public class Order {
     @JsonIgnore
     @JoinColumn(name = "customer_id")
     private Customer customer;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
     private Address shippingAddress;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "billing_address_id", referencedColumnName = "id")
     private Address billingAddress;
 
@@ -48,7 +50,6 @@ public class Order {
 
     public Order() {
     }
-
 
 
     public Order(int totalQuantity, BigDecimal totalPrice, String status) {

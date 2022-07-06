@@ -27,4 +27,8 @@ public interface UserService {
     Customer updateProfileImage(String username, MultipartFile picture) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException;
     List<OrderHistoryDTO> getShoppingHistory(String email, int page, int size);
     List<OrderHistoryDTO> getAllShoppingHistory();
+
+    void deleteOrder(String order_tracking_number);
+
+    void updateOrderStatus(String order_nr, String status);
 }
