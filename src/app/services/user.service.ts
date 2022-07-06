@@ -16,6 +16,7 @@ export class UserService {
   private shoppingHistoryUrlBase: string = environment.shoppingHistoryUrlBase
   private allShoppingHistoryUrlBase: string = environment.allShoppingHistoryUrlBase
   private deleteOrderUrlBase: string = environment.deleteOrderUrlBase
+  private customerUrl: string = environment.customerCustomUrl;
 
 
   constructor(private http: HttpClient) {
@@ -49,6 +50,9 @@ export class UserService {
         observe: "events",
         reportProgress: true
       });
+  }
+  public updateOrderStatus(order_tracking_number: string, status: string): Observable<CustomHttpResponse | HttpErrorResponse>{
+    return this.http.get<CustomHttpResponse>(`${this.customerUrl}/updateStatus?order_nr=${order_tracking_number}&status=${status}`);
   }
 
   public deleteUser(userId: number): Observable<CustomHttpResponse | HttpErrorResponse> {

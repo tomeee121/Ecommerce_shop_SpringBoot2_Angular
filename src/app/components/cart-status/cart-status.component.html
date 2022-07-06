@@ -4,9 +4,11 @@
       Login
     </div>
   </a>
-  <div *ngIf="isLoggedIn" class="total" style="display: inline-block">
+  <a routerLink="/user/management">
+  <div *ngIf="isLoggedIn" class="total" style="display: inline-block; cursor: pointer">
     Welcome back {{firstName}}
   </div>
+  </a>
     <div *ngIf="isLoggedIn" (click)="logout()" class="total" style="cursor: pointer; display: inline-block">
       Logout
     </div>

@@ -1,3 +1,4 @@
+
 <table style="margin-top: 80px;padding: 0px 20px; width: auto; background-color: snow"  class="table table-hover">
   <thead style="margin-top: 80px;padding: 0px 30px; width: auto; text-align: center; vertical-align: middle">
   <tr>
@@ -13,14 +14,19 @@
     <th scope="col">City</th>
     <th scope="col">Street</th>
     <th scope="col">Deleting</th>
+    <th *ngIf="isAdmin" scope="col">Change status</th>
   </tr>
   </thead>
   <tbody style="margin-top: 80px;padding: 0px 30px; width: auto; text-align: center; align-content: center; vertical-align: middle" >
-  <tr *ngFor="let order of shoppingHistory; let i = index">
+    <tr *ngFor="let order of shoppingHistory; let i = index">
     <th scope="row">{{i}}</th>
     <td>{{order.order_tracking_number}}</td>
     <td>{{order.quantity}}</td>
-    <td>{{order.status}}
+    <td *ngIf="isAdmin" >
+      <input #inputElement placeholder="{{order.status}}" type="text">
+        <button (click)="changeStatus(order.order_tracking_number, inputElement.value)" style="position: fixed; right: 17px; vertical-align: middle; line-height: 16px" type="button" class="btn btn-primary" value="Update">Update</button>
+    </td>
+    <td *ngIf="!isAdmin">{{order.status}}</td>
     <td>{{order.date_created}}</td>
     <td>{{order.date_updated}}</td>
     <td>{{order.country}}</td>
@@ -32,3 +38,4 @@
   </tr>
   </tbody>
 </table>
+

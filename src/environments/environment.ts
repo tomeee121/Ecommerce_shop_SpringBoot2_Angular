@@ -7,7 +7,8 @@ export const environment = {
   apiCustomerUrl: 'http://localhost:8080',
   shoppingHistoryUrlBase: 'http://localhost:8080/customer/shopping-history',
   allShoppingHistoryUrlBase:'http://localhost:8080/customer/all-shopping-history',
-  deleteOrderUrlBase: 'http://localhost:8080/customer/deleteOrder'
+  deleteOrderUrlBase: 'http://localhost:8080/customer/deleteOrder',
+  customerCustomUrl: 'http://localhost:8080/customer'
 };
 
 /*
