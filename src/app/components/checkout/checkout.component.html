@@ -57,7 +57,7 @@
           <div class="row">
             <div class="col-md-2"><label>Country</label></div>
             <div class="input-space col-md-9">
-              <select (change)="getStates('shippingAdress')" formControlName="country">
+              <select (click)="getStates('shippingAdress')" (click)="changeShippingCountry($event)" formControlName="country">
                 <option *ngFor="let country of countries" [ngValue]="country">{{country.name}}</option>
               </select>
               <div class="alert alert-danger mt-1" *ngIf="shippingAdressCountry?.errors?.['required'] && (shippingAdressState?.touched || shippingAdressState?.dirty)">
@@ -68,7 +68,7 @@
           <div class="row">
             <div class="col-md-2"><label>State</label></div>
             <div class="input-space col-md-9">
-              <select formControlName="state">
+              <select (click)="changeShippingState($event)" formControlName="state" >
                 <option *ngFor="let state of states" [ngValue]="state">{{state.name}}</option>
               </select>
               <div class="alert alert-danger mt-1" *ngIf="shippingAdressState?.errors?.['required'] && (shippingAdressState?.touched || shippingAdressState?.dirty)">
@@ -135,7 +135,7 @@
             <div class="row">
               <div class="col-md-2"><label>Country</label></div>
               <div class="input-space col-md-9">
-                <select (change)="getStates('billingAdress')" formControlName="country">
+                <select (change)="changeBillingCountry($event)" (change)="getStates('billingAdress')" formControlName="country">
                   <option *ngFor="let country of countries" [ngValue]="country">{{country.name}}</option>
                 </select>
                 <div class="alert alert-danger mt-1" *ngIf="billingAdressCountry?.errors?.['required'] && (billingAdressState?.touched || billingAdressState?.dirty)">
@@ -146,7 +146,7 @@
             <div class="row">
               <div class="col-md-2"><label>State</label></div>
               <div class="input-space col-md-9">
-                <select formControlName="state">
+                <select (change)="changeBillingState($event)" formControlName="state" >
                   <option *ngFor="let state of states" [ngValue]="state">{{state.name}}</option>
                 </select>
                 <div class="alert alert-danger mt-1" *ngIf="billingAdressCountry?.errors?.['required'] && (billingAdressState?.touched || billingAdressState?.dirty)">

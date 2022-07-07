@@ -24,7 +24,7 @@
     <td>{{order.quantity}}</td>
     <td *ngIf="isAdmin" >
       <input #inputElement placeholder="{{order.status}}" type="text">
-        <button (click)="changeStatus(order.order_tracking_number, inputElement.value)" style="position: fixed; right: 17px; vertical-align: middle; line-height: 16px" type="button" class="btn btn-primary" value="Update">Update</button>
+        <button (click)="changeStatus(order.order_tracking_number, inputElement.value)" [disabled]="!isAdmin"  style="position: fixed; right: 17px; vertical-align: middle; line-height: 16px" type="button" class="btn btn-primary" value="Update">Update</button>
     </td>
     <td *ngIf="!isAdmin">{{order.status}}</td>
     <td>{{order.date_created}}</td>

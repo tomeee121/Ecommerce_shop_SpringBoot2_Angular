@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CartService} from "../../services/cart.service";
 import {ShopFormService} from "../../services/shop-form.service";
@@ -11,8 +11,6 @@ import {OrderItem} from "../../common/order-item";
 import {Purchase} from "../../common/purchase";
 import {Address} from "../../common/address";
 import {Router} from "@angular/router";
-import {stringify} from "@angular/compiler/src/util";
-import {isString} from "@ng-bootstrap/ng-bootstrap/util/util";
 import {AuthenticationService} from "../../services/authentication.service";
 import {User} from "../../common/user";
 
@@ -35,6 +33,14 @@ export class CheckoutComponent implements OnInit {
   states: State[] = [];
   user: User | undefined;
   ifLoggedIn: boolean = false;
+  // @ts-ignore
+  selectedCurrentValueNr: any;
+  shippingCountry: string[] = [];
+  shippingState: string[] = [];
+  billingCountry: string[] = [];
+  billingState: string[] = [];
+  eventTarget: any | undefined ='';
+
 
   constructor(private formBuilder: FormBuilder, private cartService: CartService, private shopFormService: ShopFormService, private checkoutService: CheckoutServiceService,
               private router: Router, private authenticationService: AuthenticationService) {}
@@ -102,16 +108,17 @@ export class CheckoutComponent implements OnInit {
     }
 
     const shippingAddress: Address = this.checkoutFormGroup?.controls['shippingAdress']?.value;
+
     // @ts-ignore
-    shippingAddress.state = this.checkoutFormGroup?.controls['shippingAdress.state']?.value.name;
+    shippingAddress.state = this.shippingState[0];
     // @ts-ignore
-    shippingAddress.country = this.checkoutFormGroup?.controls['shippingAdress.country']?.value.name;
+    shippingAddress.country = this.shippingCountry[0];
 
     const billingAddress: Address = this.checkoutFormGroup?.controls['billingAdress']?.value;
     // @ts-ignore
-    billingAddress.state = this.checkoutFormGroup?.controls['billingAdress.state']?.value.name;
+    billingAddress.state = this.billingState[0];
     // @ts-ignore
-    billingAddress.country = this.checkoutFormGroup?.controls['billingAdress.country']?.value.name;
+    billingAddress.country = this.billingCountry[0];
 
     const customer = this.checkoutFormGroup?.controls['customer']?.value;
 
@@ -120,7 +127,6 @@ export class CheckoutComponent implements OnInit {
     console.log(`purchase object done`);
     // @ts-ignore
     this.checkoutService.placeOrder(purchase).subscribe((data) => this.showAlert(data.orderTrackingNumber), (error) => this.showError());
-    console.log(`order placed`);
     this.resetCard();
   }
 
@@ -201,14 +207,16 @@ export class CheckoutComponent implements OnInit {
   }
 
   getStates(shippingAdress: string) {
+
     //get form group name from html
     const shippingGroup = this.checkoutFormGroup.get(shippingAdress);
     //use it to get a control name value
     let countryChosenCode1 = shippingGroup?.value.country.code;
     // const chosenCountryCode: string = this.countries.filter(country => country.name === countryChosen.name).map(country => country.code)[0];
     this.shopFormService.getStatesForGivenCountryCode(countryChosenCode1).subscribe(
-      data => {this.states = data;
-          this.checkoutFormGroup.get('shippingAdress')?.get('state')?.setValue(data[0])});
+      data => {
+        this.states = data;
+        this.checkoutFormGroup.get('shippingAdress')?.get('state')?.setValue(data[0])});
 }
 
   private reviewCartTotal() {
@@ -216,4 +224,34 @@ export class CheckoutComponent implements OnInit {
     this.cartService.totalPrice.subscribe(data => this.totalPrice = data);
   }
 
+  changeShippingCountry(country: any){
+    this.selectedCurrentValueNr = Number((country.target as HTMLSelectElement).value.charAt(0));
+    this.selectedCurrentValueNr+=1;
+    this.shippingCountry=this.countries.filter(x => x.id == this.selectedCurrentValueNr).map(x => x.name)
+    console.log(this.shippingCountry)
+
+  }
+
+  changeShippingState(state: any) {
+    console.log(Number((state.target as HTMLSelectElement).value.charAt(0)))
+    this.selectedCurrentValueNr = Number((state.target as HTMLSelectElement).value.charAt(0));
+    this.selectedCurrentValueNr+=1;
+    this.shippingState=this.states.filter(x => x.id == this.selectedCurrentValueNr).map(x => x.name)
+    console.log(this.shippingState)
+  }
+
+  changeBillingCountry(country: any) {
+    this.selectedCurrentValueNr = Number((country.target as HTMLSelectElement).value.charAt(0));
+    this.selectedCurrentValueNr+=1;
+    this.billingCountry=this.countries.filter(x => x.id == this.selectedCurrentValueNr).map(x => x.name)
+    console.log(this.billingCountry)
+  }
+
+  changeBillingState(state: any) {
+    this.states.forEach(x=>console.log(x.id))
+    this.selectedCurrentValueNr = Number((state.target as HTMLSelectElement).value.charAt(0));
+    this.selectedCurrentValueNr+=1;
+    this.billingState=this.states.filter(x => x.id == this.selectedCurrentValueNr).map(x => x.name)
+    console.log(this.billingState)
+  }
 }
