@@ -20,5 +20,13 @@
             <column name="unit_price" type="DECIMAL(10,2)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="005.3" author="Tomek (generated)">
+        <addForeignKeyConstraint baseColumnNames="category_id" baseTableName="product"
+                                 constraintName="FK_PRODUCT_ON_CATEGORY" referencedColumnNames="id"
+                                 referencedTableName="product_category"/>
+    </changeSet>
+    <changeSet id="005.4" author="Tomek (generated)">
+        <addUniqueConstraint columnNames="sku" constraintName="uc_product_sku" tableName="product"/>
+    </changeSet>
 
 </databaseChangeLog>

@@ -29,7 +29,7 @@
         </createTable>
     </changeSet>
     <changeSet id="002.3-order table added" author="Tomek ">
-        <createTable tableName="order">
+        <createTable tableName="order_table">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_order"/>
             </column>
@@ -58,25 +58,25 @@
     </changeSet>
     <changeSet id="002.5-address->order foreign key constraint" author="Tomek ">
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="address" constraintName="FK_ADDRESS_ON_ORDER"
-                                 referencedColumnNames="id" referencedTableName="order"/>
+                                 referencedColumnNames="id" referencedTableName="order_table"/>
     </changeSet>
     <changeSet id="002.6-order item -> order foreign key contraint" author="Tomek ">
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_item"
                                  constraintName="FK_ORDER_ITEM_ON_ORDER" referencedColumnNames="id"
-                                 referencedTableName="order"/>
+                                 referencedTableName="order_table"/>
     </changeSet>
     <changeSet id="002.7-order -> address foreign key contraint" author="Tomek ">
-        <addForeignKeyConstraint baseColumnNames="billing_address_id" baseTableName="order"
+        <addForeignKeyConstraint baseColumnNames="billing_address_id" baseTableName="order_table"
                                  constraintName="FK_ORDER_ON_BILLING_ADDRESS" referencedColumnNames="id"
                                  referencedTableName="address"/>
     </changeSet>
     <changeSet id="002.8-order -> customer foreign key contraint" author="Tomek ">
-        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="order"
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="order_table"
                                  constraintName="FK_ORDER_ON_CUSTOMER" referencedColumnNames="id"
                                  referencedTableName="customer"/>
     </changeSet>
     <changeSet id="002.9-order -> address foreign key constraint" author="Tomek ">
-        <addForeignKeyConstraint baseColumnNames="shipping_address_id" baseTableName="order"
+        <addForeignKeyConstraint baseColumnNames="shipping_address_id" baseTableName="order_table"
                                  constraintName="FK_ORDER_ON_SHIPPING_ADDRESS" referencedColumnNames="id"
                                  referencedTableName="address"/>
     </changeSet>

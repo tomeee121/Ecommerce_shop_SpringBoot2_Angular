@@ -23,9 +23,6 @@
             <column name="country_id" type="INT"/>
         </createTable>
     </changeSet>
-    <changeSet id="001-2" author="Tomek (generated)">
-        <addUniqueConstraint columnNames="sku" constraintName="uc_product_sku" tableName="product"/>
-    </changeSet>
     <changeSet id="001-3" author="Tomek (generated)">
         <addForeignKeyConstraint baseColumnNames="country_id" baseTableName="state" constraintName="FK_STATE_ON_COUNTRY"
                                  referencedColumnNames="id" referencedTableName="country"/>
