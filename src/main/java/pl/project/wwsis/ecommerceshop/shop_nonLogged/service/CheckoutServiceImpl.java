@@ -1,6 +1,7 @@
 package pl.project.wwsis.ecommerceshop.shop_nonLogged.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.CustomerRepo;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.DTO.Purchase;
@@ -11,6 +12,7 @@ import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.OrderItem;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -23,6 +25,9 @@ public class CheckoutServiceImpl implements CheckoutService {
         this.customerRepo = customerRepo;
     }
 
+    @Value("${ifProdEnv}")
+    private boolean ifProdEnv;
+
     @Override
     @Transactional
     public Purchase placeOrder(Purchase purchase) {
@@ -32,6 +37,11 @@ public class CheckoutServiceImpl implements CheckoutService {
 
         String orderTrackingNumber = generateOrderTrackingNumber();
         order.setOrderTrackingNumber(orderTrackingNumber);
+
+        if (ifProdEnv) {
+            order.setDateCreated(new Date());
+            order.setDateUpdated(new Date());
+        }
 
         Set<OrderItem> orderItems = purchase.getOrderItems();
         orderItems.forEach(orderItem -> order.add(orderItem));

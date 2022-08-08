@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.constant.SecurityConstant;
-import pl.project.wwsis.ecommerceshop.utility.JWTTokenProvider;
+import pl.project.wwsis.ecommerceshop.shop_accountsManagement.utility.JWTTokenProvider;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,7 +33,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         else{
             String path = request.getRequestURI();
             if (path.startsWith("/api") || path.startsWith("/checkout") || path.startsWith("/customer/login")
-                    || path.startsWith("/customer/register") || path.startsWith("/customer/resetPassword/**"))
+                    || path.startsWith("/customer/register") || path.startsWith("/customer/resetPassword/**") || path.startsWith("/console/**"))
             {
                 filterChain.doFilter(request, response);
                 return;

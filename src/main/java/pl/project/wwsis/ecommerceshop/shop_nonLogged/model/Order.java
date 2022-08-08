@@ -1,8 +1,10 @@
 package pl.project.wwsis.ecommerceshop.shop_nonLogged.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -21,9 +23,11 @@ public class Order {
     @Column(name = "total_price", columnDefinition="DECIMAL(10,2)")
     private BigDecimal totalPrice;
     private String status;
-    @CreationTimestamp
+//    @CreationTimestamp
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Warsaw")
     private Date dateCreated;
-    @UpdateTimestamp
+//    @UpdateTimestamp
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Europe/Warsaw")
     private Date dateUpdated;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems = new HashSet<>();

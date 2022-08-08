@@ -1,4 +1,4 @@
-package pl.project.wwsis.ecommerceshop.utility;
+package pl.project.wwsis.ecommerceshop.shop_accountsManagement.utility;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

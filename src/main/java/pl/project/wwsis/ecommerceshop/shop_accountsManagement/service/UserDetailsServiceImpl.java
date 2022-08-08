@@ -4,6 +4,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,21 +14,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pl.project.wwsis.ecommerceshop.shop_accountsManagement.MailSenderBeanImpls.*;
-import pl.project.wwsis.ecommerceshop.shop_accountsManagement.service.MailSenderBeanImpls.*;
-import pl.project.wwsis.ecommerceshop.shop_accountsManagement.service.service.MailSenderBeanImpls.*;
-import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.CustomerRepo;
-import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.OrderRepo;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.DTO.OrderHistoryDTO;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.constant.FileConstant;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.enums.Role;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.exception.EmailExistException;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.exception.UserNotFoundException;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.exception.UsernameExistException;
-import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Customer;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.model.CustomerPrincipal;
+import pl.project.wwsis.ecommerceshop.shop_accountsManagement.service.MailSenderBeanImpls.*;
+import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.CustomerRepo;
+import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.OrderRepo;
+import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Customer;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Order;
-import pl.project.wwsis.ecommerceshop.service.MailSenderBeanImpls.*;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
@@ -35,9 +34,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -57,10 +57,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     private MailSenderBeanForSuperAdmin mailSenderForSuperAdmin;
     private MailSenderBeanForAdmin mailSenderForAdmin;
     private OrderRepo orderRepo;
+    private PasswordGenerator passwordGenerator;
+
+    @Autowired
+    Environment env;
 
     public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService
             , MailSenderBeanForNormalUser mailSenderForNormalUser, MailSenderBeanForHR mailSenderForHR, MailSenderBeanForManager mailSenderForManager
-            , MailSenderBeanForSuperAdmin mailSenderForSuperAdmin, MailSenderBeanForAdmin mailSenderForAdmin, OrderRepo orderRepo) {
+            , MailSenderBeanForSuperAdmin mailSenderForSuperAdmin, MailSenderBeanForAdmin mailSenderForAdmin, OrderRepo orderRepo, PasswordGenerator passwordGenerator) {
         this.customerRepo = customerRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
@@ -70,7 +74,9 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         this.mailSenderForSuperAdmin = mailSenderForSuperAdmin;
         this.mailSenderForAdmin = mailSenderForAdmin;
         this.orderRepo = orderRepo;
+        this.passwordGenerator = passwordGenerator;
     }
+
 
     @Override
     @Transactional
@@ -102,10 +108,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public Customer register(String firstName, String lastName, String email, String username) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
+
         validateNewUsernameAndPassword(StringUtils.EMPTY, username, email);
+        System.out.println("walidated");
         Customer customer = new Customer();
         customer.setCustomerId(generateCustomerId());
-        String password = generatePassword();
+        String password = passwordGenerator.generatePassword();
+        System.out.println(password + "  <- password");
         String encodedPassword = encodePassword(password);
         customer.setPassword(encodedPassword);
         customer.setFirstName(firstName);
@@ -119,7 +128,11 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         customer.setAuthorities(Role.ROLE_USER.getAuthorities());
         customer.setImageUrl(getTemporaryImageUrl(username));
         customerRepo.save(customer);
-        mailSenderForNormalUser.sendEmail(firstName, password, email);
+        System.out.println(customer);
+//        if (Arrays.asList(env.getActiveProfiles()).contains("prod")) {
+//            mailSenderForNormalUser.sendEmail(firstName, password, email);
+//        }
+        customer.setPassword(null);
         return customer;
     }
 
@@ -245,6 +258,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public List<OrderHistoryDTO> getShoppingHistory(String email, int page, int size) {
         List<Order> ordersByEmail = orderRepo.findOrdersByEmail(email, PageRequest.of(page, size));
         List<OrderHistoryDTO> orderHistoryDTOS = mapOrderToDTO(ordersByEmail);
+        System.out.println(orderHistoryDTOS +"  <-- list DTO");
         return orderHistoryDTOS;
     }
 
@@ -266,7 +280,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Transactional
     @Override
     public void updateOrderStatus(String order_nr, String status) {
-        orderRepo.updateOrderStatus(status, order_nr);
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        LocalDateTime myDateObj = LocalDateTime.now();
+        System.out.println("Before formatting: " + myDateObj);
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String formattedDate = myDateObj.format(myFormatObj);
+        System.out.println("after: "+formattedDate);
+        orderRepo.updateOrderStatus(status, order_nr, new Date());
     }
 
     @Transactional
@@ -296,12 +317,12 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         return bCryptPasswordEncoder.encode(password);
     }
 
-    private String generatePassword() {
+    public String generatePassword() {
         return RandomStringUtils.randomAlphabetic(10);
     }
 
     private String generateCustomerId() {
-        return RandomStringUtils.random(10);
+        return UUID.randomUUID().toString();
     }
 
     private Customer validateNewUsernameAndPassword(String currentUsername, String newUsername, String email) throws UserNotFoundException, UsernameExistException, EmailExistException {

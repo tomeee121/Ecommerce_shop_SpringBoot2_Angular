@@ -3,6 +3,7 @@ package pl.project.wwsis.ecommerceshop.shop_accountsManagement.service.MailSende
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -21,7 +22,6 @@ public abstract class MailSenderBean {
     Logger logger = LoggerFactory.getLogger(MailSender.class);
 
     abstract String getInfoAboutAuthoritiesForEmail();
-
 
     public void sendEmail(String firstName, String password, String to) throws MessagingException {
         String infoAboutAuthoritiesForEmail = getInfoAboutAuthoritiesForEmail();

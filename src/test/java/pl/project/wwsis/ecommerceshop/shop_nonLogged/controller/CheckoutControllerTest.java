@@ -66,6 +66,8 @@ class CheckoutControllerTest {
                         .content(objectMapper.writeValueAsString(purchase)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful()).andReturn();
         Purchase purchaseResponse = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Purchase.class);
+
+        //then
         Assertions.assertNotNull(purchaseResponse);
         assertThat(purchaseResponse.getOrderTrackingNumber(), instanceOf(String.class));
     }

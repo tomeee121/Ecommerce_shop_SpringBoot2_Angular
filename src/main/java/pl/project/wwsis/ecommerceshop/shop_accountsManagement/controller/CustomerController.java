@@ -20,7 +20,7 @@ import pl.project.wwsis.ecommerceshop.shop_accountsManagement.exception.Username
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Customer;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.model.CustomerPrincipal;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.service.UserService;
-import pl.project.wwsis.ecommerceshop.utility.JWTTokenProvider;
+import pl.project.wwsis.ecommerceshop.shop_accountsManagement.utility.JWTTokenProvider;
 
 import javax.mail.MessagingException;
 import java.io.ByteArrayOutputStream;

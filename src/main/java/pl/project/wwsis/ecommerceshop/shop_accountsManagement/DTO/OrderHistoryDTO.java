@@ -112,4 +112,20 @@ public class OrderHistoryDTO {
     public void setStreet(String street) {
         Street = street;
     }
+
+    @Override
+    public String toString() {
+        return "OrderHistoryDTO{" +
+                "order_tracking_number='" + order_tracking_number + '\'' +
+                ", quantity=" + quantity +
+                ", status='" + status + '\'' +
+                ", date_created=" + date_created +
+                ", date_updated=" + date_updated +
+                ", country='" + country + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", City='" + City + '\'' +
+                ", State='" + State + '\'' +
+                ", Street='" + Street + '\'' +
+                '}';
+    }
 }

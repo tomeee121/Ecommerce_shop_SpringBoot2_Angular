@@ -1,7 +1,9 @@
 package pl.project.wwsis.ecommerceshop.shop_accountsManagement.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -33,6 +35,8 @@ public class SecurityConfig {
     private JwtAccessDeniedHandler accessDeniedHandler;
     private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    Environment env;
 
     public SecurityConfig(JwtAuthorizationFilter jwtAuthorizationFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler accessDeniedHandler,
                           UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder passwordEncoder) {
@@ -51,6 +55,10 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
+            http.headers().frameOptions().disable();
+        }
         return http.build();
     }
 
@@ -90,7 +98,6 @@ public class SecurityConfig {
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/api/**", apiCorsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/customer/**", corsConfiguration);
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/checkout/**", corsConfiguration);
-
 
         CorsFilter corsFilter = new CorsFilter(urlBasedCorsConfigurationSource);
         return corsFilter;

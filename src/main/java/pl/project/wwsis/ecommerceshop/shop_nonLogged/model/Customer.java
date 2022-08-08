@@ -159,4 +159,22 @@ public class Customer {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", customerId='" + customerId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", role='" + role + '\'' +
+                ", isActive=" + isActive +
+                ", isNotLocked=" + isNotLocked +
+
+                '}';
+    }
 }

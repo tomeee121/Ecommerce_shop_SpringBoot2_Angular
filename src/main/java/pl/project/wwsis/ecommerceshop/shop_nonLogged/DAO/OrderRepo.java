@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Order;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -28,8 +29,8 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 
     Order findByOrderTrackingNumberEquals(String orderNr);
 
-    @Query(value = "update Order o set o.status = :status where o.orderTrackingNumber = :order_tracking_number")
+    @Query(value = "update Order o set o.status = :status, o.dateUpdated = :date where o.orderTrackingNumber = :order_tracking_number")
     @Modifying
-    void updateOrderStatus(@Param("status") String status, @Param("order_tracking_number") String order_tracking_number);
+    void updateOrderStatus(@Param("status") String status, @Param("order_tracking_number") String order_tracking_number, Date date);
 
 }
