@@ -9,12 +9,18 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.project.WWSIS</groupId>
-    <artifactId>ecommerce-Shop</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>ecommerce-Shop</name>
-    <description>ecommerce-Shop</description>
+    <artifactId>ecommerce-shop</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>ecommerce-shop</name>
+    <description>E-commerce shop</description>
+    <organization>
+        <name>TomaszBorowski</name>
+    </organization>
     <properties>
         <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <docker.user>tomeklfc111</docker.user>
     </properties>
     <dependencies>
         <dependency>
@@ -29,13 +35,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>2.5.11</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
@@ -56,21 +60,14 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>31.0.1-jre</version>
         </dependency>
-
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -87,29 +84,45 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>4.6.0</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>2.1.212</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-
-
     </dependencies>
 
-
+    <build>
+        <plugins>
+            //pushed with the command: mvn clean compile jib:build
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:17</image>
+                        <platforms>
+                            <platform>
+                                <architecture>arm64</architecture>
+                                <os>linux</os>
+                            </platform>
+                        </platforms>
+                    </from>
+                    <to>
+                        <image>docker.io/${docker.user}/${project.artifactId}:${project.version}</image>
+                        <tags>
+                            <tag>latest</tag>
+                        </tags>
+                    </to>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
