@@ -33,7 +33,7 @@ export class UserComponent implements OnInit, OnDestroy {
       this.shoppingHistory = this.subscriptions.push(this.userService.getShoppingHistory(this.userEmail, 0, 15)
         // @ts-ignore
         .subscribe((data: OrderHistoryDTO[]) => {
-          // this.storage.setItem('orders', JSON.stringify(data));
+          this.shoppingHistory=data;
           console.log(data)
           this.notificationService.notify(NotificationType.SUCCESS, 'Orders history has been loaded')
         },
