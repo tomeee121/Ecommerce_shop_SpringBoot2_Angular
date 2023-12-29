@@ -100,7 +100,6 @@
 
     <build>
         <plugins>
-            //pushed with the command: mvn clean compile jib:build
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
@@ -110,7 +109,8 @@
                         <image>eclipse-temurin:17</image>
                         <platforms>
                             <platform>
-                                <architecture>arm64</architecture>
+<!--                                <architecture>arm64</architecture>-->
+                                <architecture>amd64</architecture>
                                 <os>linux</os>
                             </platform>
                         </platforms>

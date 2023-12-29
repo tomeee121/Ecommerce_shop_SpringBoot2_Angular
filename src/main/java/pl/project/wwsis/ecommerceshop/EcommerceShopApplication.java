@@ -22,4 +22,5 @@ public class EcommerceShopApplication {
         return new BCryptPasswordEncoder();
     }
 
+    //pushed with the command: mvn clean compile jib:build
 }
