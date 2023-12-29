@@ -113,8 +113,9 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         System.out.println("walidated");
         Customer customer = new Customer();
         customer.setCustomerId(generateCustomerId());
-        String password = passwordGenerator.generatePassword();
-        System.out.println(password + "  <- password");
+//        String password = passwordGenerator.generatePassword();
+        String password = "pass123456";
+                System.out.println(password + "  <- password");
         String encodedPassword = encodePassword(password);
         customer.setPassword(encodedPassword);
         customer.setFirstName(firstName);
