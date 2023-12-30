@@ -40,4 +40,5 @@
     <include file="db/changelog/changesets/004-added Customer attributes for Spring security.xml"/>
     <include file="db/changelog/changesets/005 - added role attribute to the Customer object .xml"/>
     <include file="db/changelog/changesets/002.11-add precision to BigDecimal values for Hibernate mapping.xml"/>
+    <include file="db/changelog/changesets/006 - SQL inserts.xml"/>
 </databaseChangeLog>
