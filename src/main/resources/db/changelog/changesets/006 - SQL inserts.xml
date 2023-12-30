@@ -51,6 +51,17 @@
 
                 <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
         </changeSet>
+        <changeSet id="006.5" author="Tomek">
+                <sql>SET FOREIGN_KEY_CHECKS=0;
+                        SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';
+                </sql>
+
+                <sqlFile encoding="UTF-8"
+                         path="inserts_customer.sql"
+                         relativeToChangelogFile="true"/>
+
+                <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+        </changeSet>
 </databaseChangeLog>
 
 
