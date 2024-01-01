@@ -14,6 +14,7 @@ export class ProductService {
 
   constructor(private httpClient: HttpClient) { }
 
+  //this is useful for showing details about the product
   getProduct(theProductId: number): Observable<Product> {
     const productUrl = `${this.baseUrl}/${theProductId}`;
 

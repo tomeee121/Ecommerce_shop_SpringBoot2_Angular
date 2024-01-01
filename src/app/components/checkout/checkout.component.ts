@@ -110,9 +110,11 @@ export class CheckoutComponent implements OnInit {
     const shippingAddress: Address = this.checkoutFormGroup?.controls['shippingAdress']?.value;
 
     // @ts-ignore
-    shippingAddress.state = this.shippingState[0];
+//     shippingAddress.state = this.shippingState[0];
+    shippingAddress.state = 'Zachodniopomorskie';
     // @ts-ignore
-    shippingAddress.country = this.shippingCountry[0];
+//     shippingAddress.country = this.shippingCountry[0];
+    shippingAddress.country = 'Poland';
 
     const billingAddress: Address = this.checkoutFormGroup?.controls['billingAdress']?.value;
     // @ts-ignore
@@ -142,6 +144,7 @@ export class CheckoutComponent implements OnInit {
     this.cartService.cartItems = [];
     this.cartService.totalPrice.next(0);
     this.cartService.totalQuantity.next(0);
+    this.cartService.persistCartItems();
     this.checkoutFormGroup.reset();
     this.router.navigateByUrl("/products");
 

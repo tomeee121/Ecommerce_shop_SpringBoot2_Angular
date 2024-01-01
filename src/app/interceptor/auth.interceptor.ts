@@ -14,6 +14,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService) {}
 
   intercept(httpRequest: HttpRequest<unknown>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
+    //endpointy publiczne
     if(httpRequest.url.includes(`${this.authenticationService.host}/customer/login`)){
       return httpHandler.handle(httpRequest);
     }
@@ -33,8 +34,8 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     this.authenticationService.loadToken();
     const token = this.authenticationService.getToken();
+    //w przypakdu gdy endpoint powinien zostac zabezpieczony request jest klonowany i dopuszcozny do back-endu z tokenem
     const request = httpRequest.clone({setHeaders: {Authorization: `Bearer ${token}` }});
     return httpHandler.handle(request);
-
   }
 }
