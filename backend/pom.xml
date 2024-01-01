@@ -109,8 +109,8 @@
                         <image>eclipse-temurin:17</image>
                         <platforms>
                             <platform>
-<!--                                <architecture>arm64</architecture>-->
-                                <architecture>amd64</architecture>
+                                <architecture>arm64</architecture>
+<!--                                <architecture>amd64</architecture>-->
                                 <os>linux</os>
                             </platform>
                         </platforms>
