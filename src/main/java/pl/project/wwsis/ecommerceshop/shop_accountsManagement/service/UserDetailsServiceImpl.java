@@ -110,11 +110,10 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public Customer register(String firstName, String lastName, String email, String username) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
 
         validateNewUsernameAndPassword(StringUtils.EMPTY, username, email);
-        System.out.println("walidated");
         Customer customer = new Customer();
         customer.setCustomerId(generateCustomerId());
 //        String password = passwordGenerator.generatePassword();
-        String password = "pass123456";
+        String password = "zYoiOp1;";
                 System.out.println(password + "  <- password");
         String encodedPassword = encodePassword(password);
         customer.setPassword(encodedPassword);
