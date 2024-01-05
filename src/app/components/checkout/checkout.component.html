@@ -210,12 +210,9 @@
                 <div class="col-md-2"><label>Card type</label></div>
                 <div class="col-md-9">
                   <div class="input-space">
-                    <input formControlName="cardType" type="text">
-                    <div *ngIf="creditCardType?.invalid && (creditCardType?.dirty || creditCardType?.touched)">
-                      <div class="alert alert-danger mt-1" *ngIf="creditCardType?.errors?.['required'] || creditCardType?.errors?.['rejectOnlyWhiteSpace']">
-                        Card type field is required
-                      </div>
-                    </div>
+                    <select formControlName="cardType">
+                      <option *ngFor="let cardType of creditCardTypes">{{cardType}}</option>
+                    </select>
                   </div>
                 </div>
               </div>

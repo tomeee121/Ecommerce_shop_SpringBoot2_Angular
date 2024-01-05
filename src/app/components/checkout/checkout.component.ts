@@ -29,6 +29,7 @@ export class CheckoutComponent implements OnInit {
 
   creditCardMonths: number[] = [];
   creditCardYears: number[] = [];
+  creditCardTypes: string[] = ['VISA', 'MasterCard', 'Paypal'];
   countries: Country[] = [];
   states: State[] = [];
   user: User | undefined;

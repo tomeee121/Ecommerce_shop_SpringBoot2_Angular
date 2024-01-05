@@ -608,7 +608,8 @@ input.au-input.au-input-xl{
   border-radius:30px;
   outline:0;
   padding:10px;
-  border:1px solid #ccc
+  border:1px solid #ccc;
+  background-color: cornsilk;
 }
 .input-space select{
   width:100%;
@@ -616,7 +617,8 @@ input.au-input.au-input-xl{
   border-radius:30px;
   outline:0;
   padding:0 10px;
-  border:1px solid #ccc
+  border:1px solid #ccc;
+  background-color: cornsilk;
 }
 .au-checkbox{
   display:block;

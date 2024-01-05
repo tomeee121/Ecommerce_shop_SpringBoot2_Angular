@@ -10,20 +10,20 @@
           <div class="card-body">
             <h1>Login</h1>
             <p class="text-muted">Sign In to your account</p>
-            <div style="margin-bottom: 2px" class="input-group mb-3">
+            <div style="margin-bottom: 2px" class="input-group mb-1">
               <span class="input-group-addon"><i class="fa fa-user"></i></span>
               <input name="username" type="text" class="form-control" placeholder="Username" style="margin-left: 20px"
                      [(ngModel)]="username" required>
             </div>
             <span class="btn-danger" style="opacity: 60%" *ngIf="username.length < 5 ">Please enter the username</span>
-            <div class="input-group mb-4">
+            <div class="input-group mb-1">
               <span class="input-group-addon"><i class="fa fa-lock"></i></span>
               <input name="password" type="password" class="form-control" placeholder="Password" style="margin-left: 20px"
                      [(ngModel)]="password" required>
             </div>
             <span class="btn-danger" style="opacity: 60%" *ngIf="password.length < 5 ">Please enter the password</span>
             <div class="row">
-              <div class="col-6">
+              <div class="col-6 mt-2">
                 <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary px-4">Login</button>
               </div>
             </div>

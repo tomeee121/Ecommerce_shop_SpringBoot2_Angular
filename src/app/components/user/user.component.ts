@@ -55,14 +55,17 @@ export class UserComponent implements OnInit, OnDestroy {
 
   deleteOrder(order_tracking_number: string) {
     // @ts-ignore
-    this.subscriptions.push(this.userService.deleteOrder(order_tracking_number).subscribe((response: HttpResponse<CustomHttpResponse>) =>
+    this.subscriptions.push(this.userService.deleteOrder(order_tracking_number).subscribe((response: HttpResponse<CustomHttpResponse>) => {
         // @ts-ignore
-        this.notificationService.notify(NotificationType.SUCCESS, 'Successfully deleted order'),
-                            (error: HttpErrorResponse) => this.notificationService.notify(NotificationType.ERROR, error.message)));
-    // let index: number = this.shoppingHistory.findIndex(tempOrder => tempOrder.order_tracking_number === order_tracking_number);
-    // this.shoppingHistory.splice(index, 1);
-    // @ts-ignore
-    // this.shoppingHistory = JSON.parse(this.storage.getItem('orders'));
+        this.notificationService.notify(NotificationType.SUCCESS, 'Successfully deleted order');
+            window.location.reload();
+        },
+            (error: HttpErrorResponse) => this.notificationService.notify(NotificationType.ERROR, error.message)));
+
+  }
+
+  refresh() {
+//     window.location.reload();
   }
 
   changeStatus(order_tracking_number: string, status: string) {
