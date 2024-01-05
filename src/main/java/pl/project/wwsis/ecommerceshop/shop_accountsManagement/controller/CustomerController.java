@@ -56,7 +56,7 @@ public class CustomerController extends ExceptionHandling {
 
     @PostMapping("/register")
     public ResponseEntity<Customer> register(@RequestBody Customer customer) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
-        Customer customerSaved = userService.register(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getUsername());
+        Customer customerSaved = userService.register(customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getUsername(), customer.getPassword());
         return new ResponseEntity<Customer>(customerSaved, HttpStatus.CREATED);
     }
 

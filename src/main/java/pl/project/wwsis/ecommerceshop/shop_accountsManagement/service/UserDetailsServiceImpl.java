@@ -23,9 +23,11 @@ import pl.project.wwsis.ecommerceshop.shop_accountsManagement.exception.Username
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.model.CustomerPrincipal;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.service.MailSenderBeanImpls.*;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.CustomerRepo;
+import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.OrderItemRepo;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.DAO.OrderRepo;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Customer;
 import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Order;
+import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.OrderItem;
 
 import javax.mail.MessagingException;
 import javax.transaction.Transactional;
@@ -61,6 +63,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Autowired
     Environment env;
+    @Autowired
+    private OrderItemRepo orderItemRepo;
 
     public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService
             , MailSenderBeanForNormalUser mailSenderForNormalUser, MailSenderBeanForHR mailSenderForHR, MailSenderBeanForManager mailSenderForManager
@@ -107,14 +111,13 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public Customer register(String firstName, String lastName, String email, String username) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
+    public Customer register(String firstName, String lastName, String email, String username, String password) throws UserNotFoundException, EmailExistException, UsernameExistException, MessagingException {
 
         validateNewUsernameAndPassword(StringUtils.EMPTY, username, email);
         Customer customer = new Customer();
         customer.setCustomerId(generateCustomerId());
 //        String password = passwordGenerator.generatePassword();
-        String password = "zYoiOp1;";
-                System.out.println(password + "  <- password");
+//        String password = "zYoiOp1;";
         String encodedPassword = encodePassword(password);
         customer.setPassword(encodedPassword);
         customer.setFirstName(firstName);
@@ -274,6 +277,14 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Transactional
     @Override
     public void deleteOrder(String order_tracking_number) {
+        Order order = orderRepo.findByOrderTrackingNumber(order_tracking_number).orElseThrow(() -> new IllegalArgumentException("No order with such tracking nr"));
+        for (OrderItem orderItem : order.getOrderItems()) {
+            orderItem.setOrder(null);
+            order.setOrderItems(null);
+            orderRepo.save(order);
+            orderItemRepo.save(orderItem);
+            orderItemRepo.deleteById(orderItem.getId());
+        }
         orderRepo.deleteOrderByOrderTracking(order_tracking_number);
     }
 

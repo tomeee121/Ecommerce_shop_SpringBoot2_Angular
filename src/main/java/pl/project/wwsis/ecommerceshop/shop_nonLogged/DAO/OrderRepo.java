@@ -10,9 +10,12 @@ import pl.project.wwsis.ecommerceshop.shop_nonLogged.model.Order;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepo extends JpaRepository<Order, Long> {
+    @Query("select o from Order o where o.orderTrackingNumber = ?1")
+    Optional<Order> findByOrderTrackingNumber(String orderTrackingNumber);
 
     @Query(value = "SELECT o from Order o inner join Customer c on o.customer.id = c.id " +
             "inner join Address a on o.shippingAddress.id = a.id where c.email = :email order by o.dateCreated DESC")

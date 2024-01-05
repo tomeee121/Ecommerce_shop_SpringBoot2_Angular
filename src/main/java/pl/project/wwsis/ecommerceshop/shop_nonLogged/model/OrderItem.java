@@ -1,6 +1,7 @@
 package pl.project.wwsis.ecommerceshop.shop_nonLogged.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ public class OrderItem {
     private BigDecimal unitPrice;
     private int quantity;
     private Long productId;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "order_id")
     private Order order;

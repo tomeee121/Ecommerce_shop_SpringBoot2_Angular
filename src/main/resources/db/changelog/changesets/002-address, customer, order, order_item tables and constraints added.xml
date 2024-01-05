@@ -58,7 +58,7 @@
     </changeSet>
     <changeSet id="002.5-address->order foreign key constraint" author="Tomek ">
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="address" constraintName="FK_ADDRESS_ON_ORDER"
-                                 referencedColumnNames="id" referencedTableName="order_table"/>
+                                 referencedColumnNames="id" referencedTableName="order_table" onDelete="SET NULL"/>
     </changeSet>
     <changeSet id="002.6-order item -> order foreign key contraint" author="Tomek ">
         <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_item"
