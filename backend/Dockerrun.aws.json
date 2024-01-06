@@ -15,7 +15,7 @@
       "environment": [
         {
           "name": "spring.datasource.url",
-          "value": "jdbc:mysql://TODO:3306/shop"
+          "value": "jdbc:mysql://awseb-e-7qkjwe4vdk-stack-awsebrdsdatabase-qco1fzferbhr.chau22cusrlm.eu-north-1.rds.amazonaws.com:3306/ebdb"
         },
         {
           "name": "spring.datasource.username",
