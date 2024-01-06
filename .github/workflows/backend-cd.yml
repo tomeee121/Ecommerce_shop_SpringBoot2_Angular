@@ -60,7 +60,7 @@ jobs:
           environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
           version_label: ${{ steps.build-number.outputs.BUILD_NUMBER }}
           region: ${{ secrets.EB_REGION }}
-          deployment_package: Dockerrun.aws.json
+          deployment_package: backend/Dockerrun.aws.json
           version_description: ${{ github.SHA }}
       - name: Commit, push new Dockerrun.aws.json
         run: |
