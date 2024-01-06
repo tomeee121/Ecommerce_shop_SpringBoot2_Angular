@@ -1,6 +1,6 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 **/node_modules/
+**/.DS_store
