@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default" defaultIncludeChangeLogFile="src/main/resources/db/changelog/2022/04/master.xml" defaultSearchScope="Test only">
+        <packages>
+          <package value="pl.project.wwsis.ecommerceshop" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
+</project>

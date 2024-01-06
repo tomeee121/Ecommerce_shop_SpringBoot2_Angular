@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+        <include file="inserts_country.sql"
+                 relativeToChangelogFile="true" />
+        <changeSet id="006.1" author="Tomek">
+                <sql>SET FOREIGN_KEY_CHECKS=0;
+                        SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';
+                </sql>
+
+                <sqlFile encoding="UTF-8"
+                          path="inserts_country.sql"
+                          relativeToChangelogFile="true"/>
+
+                <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+        </changeSet>
+        <changeSet id="006.2" author="Tomek">
+                <sql>SET FOREIGN_KEY_CHECKS=0;
+                        SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';
+                </sql>
+
+                <sqlFile encoding="UTF-8"
+                         path="inserts_state.sql"
+                         relativeToChangelogFile="true"/>
+
+                <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+        </changeSet>
+        <changeSet id="006.3" author="Tomek">
+                <sql>SET FOREIGN_KEY_CHECKS=0;
+                        SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';
+                </sql>
+
+                <sqlFile encoding="UTF-8"
+                         path="inserts_product_category.sql"
+                         relativeToChangelogFile="true"/>
+
+                <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+        </changeSet>
+        <changeSet id="006.4" author="Tomek">
+                <sql>SET FOREIGN_KEY_CHECKS=0;
+                        SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';
+                </sql>
+
+                <sqlFile encoding="UTF-8"
+                         path="inserts_product.sql"
+                         relativeToChangelogFile="true"/>
+
+                <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+        </changeSet>
+        <changeSet id="006.5" author="Tomek">
+                <sql>SET FOREIGN_KEY_CHECKS=0;
+                        SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';
+                </sql>
+
+                <sqlFile encoding="UTF-8"
+                         path="inserts_customer.sql"
+                         relativeToChangelogFile="true"/>
+
+                <sql>SET FOREIGN_KEY_CHECKS=1;</sql>
+        </changeSet>
+</databaseChangeLog>
+
+
+
