@@ -21,6 +21,8 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <docker.user>tomeklfc111</docker.user>
+        <docker.image.name>ecommerce-shop</docker.image.name>
+        <docker.image.tag/>
     </properties>
     <dependencies>
         <dependency>
@@ -116,7 +118,7 @@
                         </platforms>
                     </from>
                     <to>
-                        <image>docker.io/${docker.user}/${project.artifactId}:${project.version}</image>
+                        <image>docker.io/${docker.user}/${docker.image.name}:${docker.image.tag}</image>
                         <tags>
                             <tag>latest</tag>
                         </tags>
