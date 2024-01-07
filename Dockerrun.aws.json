@@ -2,13 +2,25 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
+      "name": "ecommerce-shop-frontend",
+      "image": "tomeklfc111/ecommerce-shop-frontend:latest",
+      "essential": true,
+      "memory": 256,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 4200
+        }
+      ]
+    },
+    {
       "name": "ecommerce-shop",
       "image": "tomeklfc111/ecommerce-shop:07.01.2024.15.03.35",
       "essential": true,
       "memory": 512,
       "portMappings": [
         {
-          "hostPort": 80,
+          "hostPort": 8080,
           "containerPort": 8080
         }
       ],
