@@ -1,6 +1,6 @@
 FROM node:18.19-alpine as builder
 WORKDIR /app
-COPY package*.json .
+COPY package*.json ./
 RUN npm i --verbose
 RUN npm i @angular/cli@13.3.3
 COPY . .
