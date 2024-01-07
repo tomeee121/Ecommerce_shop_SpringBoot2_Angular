@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Slack - start new deployment
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":progress_bar: Deployment started!"}' 
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":progress_bar: Deployment started!"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
       - uses: mirromutth/mysql-action@v1.1
         with:
@@ -48,13 +48,13 @@ jobs:
         run: echo "BUILD_NUMBER=$(date '+%d.%m.%Y.%H.%M.%S')" >> $GITHUB_OUTPUT
       - name: Slack - building with maven
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with maven"}' 
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":maven: Building with maven"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
       - name: Build and push to Docker Hub
         run: mvn -ntp package -DskipTests -Ddocker.image.tag=${{ steps.build-number.outputs.BUILD_NUMBER }} jib:build
       - name: Slack - pushed new image to Docker hub
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":docker: New image pushed to Docker hub. Tag:${{ steps.build-number.outputs.BUILD_NUMBER }}"}' 
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":docker: New image pushed to Docker hub. Tag:${{ steps.build-number.outputs.BUILD_NUMBER }}"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
       - name: Update Dockerrun.aws.json with the new build nr
         run: |
@@ -65,7 +65,7 @@ jobs:
           cat Dockerrun.aws.json
       - name: Slack - deploying to AWS Elastic Beanstalk
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":aws: Started deployment to AWS Elastic Beanstalk"}' 
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":aws: Started deployment to AWS Elastic Beanstalk"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v21
@@ -80,7 +80,7 @@ jobs:
           version_description: ${{ github.SHA }}
       - name: Slack - committing to github repo
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":githubloading: Committing to github: https://github.com/tomeee121/Ecommerce_shop_SpringBoot2_Angular/commit/${{ github.SHA }}"}' 
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":githubloading: Committing to github: https://github.com/tomeee121/Ecommerce_shop_SpringBoot2_Angular/commit/${{ github.SHA }}"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
       - name: Commit, push new Dockerrun.aws.json
         run: |
@@ -91,9 +91,9 @@ jobs:
           git push
       - name: Slack - deployment and commit completed
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":":party_blob: Dockerrun.aws.json committed with the new tag to github"}' 
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":party_blob: Dockerrun.aws.json committed with the new tag to github"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
       - name: Slack - environment updated
         run: >
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Job status: ${{ job.status }} available here: http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/"}' 
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":"Job status: ${{ job.status }} available here: http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
