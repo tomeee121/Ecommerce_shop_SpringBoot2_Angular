@@ -15,7 +15,7 @@ jobs:
   deploy:
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: backend
     runs-on: ubuntu-latest
     steps:
       - name: Slack - start new deployment
