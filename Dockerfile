@@ -8,4 +8,4 @@ RUN npm run build --prod
 
 FROM nginx:1.21.6-alpine
 COPY --from=builder /app/dist/shop-frontend /usr/share/nginx/html
-EXPOSE 4200
+EXPOSE 80
