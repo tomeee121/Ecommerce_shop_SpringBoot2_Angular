@@ -18,10 +18,6 @@ jobs:
         working-directory: backend
     runs-on: ubuntu-latest
     steps:
-      - name: Slack - start new deployment
-        run: >
-          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":progress_bar: Deployment started!"}' 
-          {{ secrets.SLACK_WEBHOOK_URL }}
       - uses: mirromutth/mysql-action@v1.1
         with:
           host port: 3306
@@ -33,6 +29,10 @@ jobs:
           mysql user: 'root'
           mysql password: ${{ secrets.DatabasePasswordTesting }}
       - uses: actions/checkout@v4
+      - name: Slack - start new deployment
+        run: >
+          curl && curl -X POST -H 'Content-type: application/json' --data '{"text":":progress_bar: Deployment started!"}' 
+          {{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
