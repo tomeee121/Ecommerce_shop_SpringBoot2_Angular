@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Slack - start new deployment
         run: >
-          curl && curl --verbose -X POST -H 'Content-type: application/json' --data '{"text":":progress_bar: Deployment started!"}' 
+          curl --verbose && curl --verbose -X POST -H 'Content-type: application/json' --data '{"text":":progress_bar: Deployment started!"}' 
           {{ secrets.SLACK_WEBHOOK_URL }}
       - uses: actions/setup-java@v4
         with:
