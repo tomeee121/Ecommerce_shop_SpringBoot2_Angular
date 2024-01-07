@@ -3,6 +3,7 @@ import {map, Observable, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {Country} from "../common/country";
 import {State} from "../common/state";
+import {environment} from "../../environments/environment";
 
 
 @Injectable({
@@ -10,8 +11,8 @@ import {State} from "../common/state";
 })
 export class ShopFormService {
 
-  baseStateUrl: string = 'http://localhost:8080/api/states';
-  baseCountryUrl: string = 'http://localhost:8080/api/countries';
+  private baseStateUrl: string = environment.baseStateUrl;
+  private baseCountryUrl: string = environment.baseCountryUrl;
   chosenCountryCode: string = 'PL';
 
   constructor(private httpClient: HttpClient) { }

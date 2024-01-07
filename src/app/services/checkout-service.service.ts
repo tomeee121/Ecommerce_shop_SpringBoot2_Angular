@@ -7,13 +7,14 @@ import {Order} from "../common/order";
 import {OrderItem} from "../common/order-item";
 import {NotificationService} from "./notification.service";
 import {NotificationType} from "../enum/notification-type.enum";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CheckoutServiceService {
 
-  private purchaseUrl: string = 'http://localhost:8080/checkout/purchase';
+  private purchaseUrl: string =  environment.purchaseUrl;
 
   constructor(private httpClient: HttpClient, private notificationService: NotificationService) { }
 
