@@ -1,13 +1,13 @@
 export const environment = {
   production: true,
-    apiCustomerUrl: 'http://localhost:8080',
-    shoppingHistoryUrlBase: 'http://localhost:8080/customer/shopping-history',
-    allShoppingHistoryUrlBase:'http://localhost:8080/customer/all-shopping-history',
-    deleteOrderUrlBase: 'http://localhost:8080/customer/deleteOrder',
-    customerCustomUrl: 'http://localhost:8080/customer',
-    baseStateUrl: 'http://localhost:8080/api/states',
-    baseCountryUrl: 'http://localhost:8080/api/countries',
-    baseUrlProducts: 'http://localhost:8080/api/products',
-    categoryUrl: 'http://localhost:8080/api/product-category',
-    purchaseUrl: 'http://localhost:8080/checkout/purchase'
+    apiCustomerUrl: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com',
+    shoppingHistoryUrlBase: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/customer/shopping-history',
+    allShoppingHistoryUrlBase:'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/customer/all-shopping-history',
+    deleteOrderUrlBase: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/customer/deleteOrder',
+    customerCustomUrl: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/customer',
+    baseStateUrl: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/api/states',
+    baseCountryUrl: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/api/countries',
+    baseUrlProducts: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/api/products',
+    categoryUrl: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/api/product-category',
+    purchaseUrl: 'http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/checkout/purchase'
 };
