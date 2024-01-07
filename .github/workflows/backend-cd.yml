@@ -88,7 +88,7 @@ jobs:
           git config user.email github-actions@example.com
           git add .
           git commit -m "update Dockerrun.aws.json with new tag ${{ steps.build-number.outputs.BUILD_NUMBER }}"
-          git push
+          git push origin HEAD:main
       - name: Slack - deployment and commit completed
         run: >
           curl -X POST -H 'Content-type: application/json' --data '{"text":":party_blob: Dockerrun.aws.json committed with the new tag to github"}' 
