@@ -1,0 +1,19 @@
+<div class="cart-area d-n" style="display: inline-block">
+  <a routerLink="/login">
+    <div *ngIf="!isLoggedIn " class="total" style="display: inline-block">
+      Login
+    </div>
+  </a>
+  <a routerLink="/user/management">
+  <div *ngIf="isLoggedIn" class="total" style="display: inline-block; cursor: pointer">
+    Welcome back {{firstName}}
+  </div>
+  </a>
+    <div *ngIf="isLoggedIn" (click)="logout()" class="total" style="cursor: pointer; display: inline-block">
+      Logout
+    </div>
+  <a routerLink="/cart-details">
+    <div class="total" style="display: inline-block">{{cartItemsAmountOfMoney | currency: 'USD'}}<span> {{cartItemsQuantity}}</span></div>
+    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+  </a>
+</div>

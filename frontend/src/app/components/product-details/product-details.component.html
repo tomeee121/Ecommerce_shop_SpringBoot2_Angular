@@ -1,0 +1,19 @@
+<div class="details-section">
+  <div class="container-fluid">
+
+    <img src="{{product?.imageUrl}}" class="detail-img">
+
+    <h3>{{product?.name}}</h3>
+
+    <div class="price-user-select-none">{{product?.unitPrice | currency: 'USD'}}</div>
+    <button (click)="addToCart(product)" class="btn primary-btn btn-sm" style="background-color: royalblue">Add to cart</button>
+
+    <hr>
+    <h4>Description</h4>
+    <p class="user-select-none">{{product?.description}}</p>
+
+  </div>
+</div>
+
+
+
