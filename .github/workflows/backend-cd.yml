@@ -101,3 +101,4 @@ jobs:
         run: >
           curl -X POST -H 'Content-type: application/json' --data '{"text":"Job status: ${{ job.status }} available here: http://test.eba-ag87a6vi.eu-north-1.elasticbeanstalk.com/"}' 
           ${{ secrets.SLACK_WEBHOOK_URL }}
+
