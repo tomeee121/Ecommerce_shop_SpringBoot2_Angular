@@ -1,10 +1,11 @@
-FROM node:18.19-alpine as builder
+FROM node:20.9.0 as builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm i --verbose
-RUN npm i @angular/cli@13.3.3
+COPY package.json ./
+RUN npm cache clean --force
+RUN npm cache verify
+RUN npm i --force --package-lock-only
 COPY . .
-RUN npm run build --prod
+RUN npm run build --prod --verbose --package-lock-only
 
 FROM nginx:1.21.6-alpine
 COPY --from=builder /app/dist/shop-frontend /usr/share/nginx/html

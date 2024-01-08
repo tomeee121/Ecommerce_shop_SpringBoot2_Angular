@@ -27,7 +27,7 @@
       "environment": [
         {
           "name": "spring.datasource.url",
-          "value": "jdbc:mysql://awseb-e-7qkjwe4vdk-stack-awsebrdsdatabase-qco1fzferbhr.chau22cusrlm.eu-north-1.rds.amazonaws.com:3306/ebdb"
+          "value": "jdbc:mysql://awseb-e-5ihdgkanxb-stack-awsebrdsdatabase-pmqi5fyhbmu7.chau22cusrlm.eu-north-1.rds.amazonaws.com:3306/ebdb"
         },
         {
           "name": "spring.datasource.username",
