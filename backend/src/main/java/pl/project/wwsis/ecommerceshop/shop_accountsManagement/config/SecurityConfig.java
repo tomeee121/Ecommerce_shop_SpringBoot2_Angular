@@ -67,7 +67,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com"));
+        corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method","Access-Control-Request-Headers"));
@@ -77,7 +77,7 @@ public class SecurityConfig {
 
         CorsConfiguration apiCorsConfiguration = new CorsConfiguration();
         apiCorsConfiguration.setAllowCredentials(true);
-        apiCorsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com"));
+        apiCorsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         apiCorsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method","Access-Control-Request-Headers"));
@@ -87,7 +87,7 @@ public class SecurityConfig {
 
         CorsConfiguration checkoutCorsConfiguration = new CorsConfiguration();
         checkoutCorsConfiguration.setAllowCredentials(true);
-        checkoutCorsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com"));
+        checkoutCorsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         checkoutCorsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method","Access-Control-Request-Headers"));
