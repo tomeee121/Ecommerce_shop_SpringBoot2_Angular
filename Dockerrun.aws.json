@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "ecommerce-shop",
-      "image": "tomeklfc111/ecommerce-shop:08.01.2024.19.34.17",
+      "image": "tomeklfc111/ecommerce-shop:09.01.2024.17.42.37",
       "essential": true,
       "memory": 512,
       "portMappings": [
