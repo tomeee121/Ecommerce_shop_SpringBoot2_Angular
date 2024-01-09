@@ -1,9 +1,11 @@
 package pl.project.wwsis.ecommerceshop.shop_accountsManagement.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -35,16 +37,21 @@ public class SecurityConfig {
     private JwtAccessDeniedHandler accessDeniedHandler;
     private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder passwordEncoder;
+    private String actuatorEndpoint;
+    private String[] allowedOrigins;
     @Autowired
     Environment env;
 
     public SecurityConfig(JwtAuthorizationFilter jwtAuthorizationFilter, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAccessDeniedHandler accessDeniedHandler,
-                          UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder passwordEncoder) {
+                          UserDetailsServiceImpl userDetailsService, BCryptPasswordEncoder passwordEncoder, @Value("${actuator.endpoint.path}") String actuatorEndpoint,
+                          @Value("#{'${allowed.origins}'.split(',')}") String[] allowedOrigins) {
         this.jwtAuthorizationFilter = jwtAuthorizationFilter;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
+        this.actuatorEndpoint = actuatorEndpoint;
+        this.allowedOrigins = allowedOrigins;
     }
 
     @Bean
@@ -52,6 +59,7 @@ public class SecurityConfig {
         http.csrf().disable().cors()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().authorizeRequests().antMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
+                .and().authorizeRequests().antMatchers(HttpMethod.GET, actuatorEndpoint).permitAll()
                 .anyRequest().authenticated()
                 .and().exceptionHandling().accessDeniedHandler(accessDeniedHandler).authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -67,7 +75,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList(allowedOrigins));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method","Access-Control-Request-Headers"));
@@ -77,7 +85,7 @@ public class SecurityConfig {
 
         CorsConfiguration apiCorsConfiguration = new CorsConfiguration();
         apiCorsConfiguration.setAllowCredentials(true);
-        apiCorsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com"));
+        apiCorsConfiguration.setAllowedOrigins(Arrays.asList(allowedOrigins));
         apiCorsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method","Access-Control-Request-Headers"));
@@ -87,7 +95,7 @@ public class SecurityConfig {
 
         CorsConfiguration checkoutCorsConfiguration = new CorsConfiguration();
         checkoutCorsConfiguration.setAllowCredentials(true);
-        checkoutCorsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com"));
+        checkoutCorsConfiguration.setAllowedOrigins(Arrays.asList(allowedOrigins));
         checkoutCorsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method","Access-Control-Request-Headers"));
