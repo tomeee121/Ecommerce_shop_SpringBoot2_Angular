@@ -2,32 +2,20 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "ecommerce-shop-frontend",
-      "image": "tomeklfc111/ecommerce-shop-frontend:latest",
-      "essential": true,
-      "memory": 256,
-      "portMappings": [
-        {
-          "hostPort": 80,
-          "containerPort": 80
-        }
-      ]
-    },
-    {
       "name": "ecommerce-shop",
       "image": "tomeklfc111/ecommerce-shop:08.01.2024.19.34.17",
       "essential": true,
       "memory": 512,
       "portMappings": [
         {
-          "hostPort": 8080,
+          "hostPort": 80,
           "containerPort": 8080
         }
       ],
       "environment": [
         {
           "name": "spring.datasource.url",
-          "value": "jdbc:mysql://awseb-e-5ihdgkanxb-stack-awsebrdsdatabase-qflaj9ydjmgo.chau22cusrlm.eu-north-1.rds.amazonaws.com:3306/ebdb"
+          "value": "jdbc:mysql://awseb-e-d6ddetyggb-stack-awsebrdsdatabase-dps6sgakrwxa.chau22cusrlm.eu-north-1.rds.amazonaws.com:3306/ebdb"
         },
         {
           "name": "spring.datasource.username",
