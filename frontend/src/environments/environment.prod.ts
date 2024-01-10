@@ -1,13 +1,13 @@
 export const environment = {
   production: true,
-    apiCustomerUrl: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080',
-    shoppingHistoryUrlBase: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/customer/shopping-history',
-    allShoppingHistoryUrlBase:'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/customer/all-shopping-history',
-    deleteOrderUrlBase: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/customer/deleteOrder',
-    customerCustomUrl: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/customer',
-    baseStateUrl: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/api/states',
-    baseCountryUrl: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/api/countries',
-    baseUrlProducts: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/api/products',
-    categoryUrl: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/api/product-category',
-    purchaseUrl: 'http://shop-ecommerce.eba-6j242pkh.eu-north-1.elasticbeanstalk.com:8080/checkout/purchase'
+    apiCustomerUrl: 'https://ecommerce-shop.tomasz-borowski.com',
+    shoppingHistoryUrlBase: 'https://ecommerce-shop.tomasz-borowski.com/customer/shopping-history',
+    allShoppingHistoryUrlBase:'https://ecommerce-shop.tomasz-borowski.com/customer/all-shopping-history',
+    deleteOrderUrlBase: 'https://ecommerce-shop.tomasz-borowski.com/customer/deleteOrder',
+    customerCustomUrl: 'https://ecommerce-shop.tomasz-borowski.com/customer',
+    baseStateUrl: 'https://ecommerce-shop.tomasz-borowski.com/api/states',
+    baseCountryUrl: 'https://ecommerce-shop.tomasz-borowski.com/api/countries',
+    baseUrlProducts: 'https://ecommerce-shop.tomasz-borowski.com/api/products',
+    categoryUrl: 'https://ecommerce-shop.tomasz-borowski.com/api/product-category',
+    purchaseUrl: 'https://ecommerce-shop.tomasz-borowski.com/checkout/purchase'
 };
