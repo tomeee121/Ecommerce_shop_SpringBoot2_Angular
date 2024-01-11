@@ -24,4 +24,10 @@ public interface CustomerRepo extends JpaRepository<Customer, Long> {
     @Query(value = "delete from Order o where o.orderTrackingNumber=:order_tracking_number")
     void deleteOrdersCascade(@Param("order_tracking_number") String order_tracking_number);
 
+    @Modifying
+    @Query(value = "update Customer set imageUrl=:image_url")
+    void updateProfileImageKey(@Param("image_url") String image_url);
+
+    @Query(value = "SELECT c.imageUrl from Customer c where c.username=:username")
+    String getProfileImageKeyByUsername(@Param("username") String username);
 }

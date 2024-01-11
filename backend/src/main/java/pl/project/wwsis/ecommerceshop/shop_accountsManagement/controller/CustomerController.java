@@ -33,6 +33,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import static pl.project.wwsis.ecommerceshop.shop_accountsManagement.constant.EmailConstant.CUSTOMER_DELETED_MESSAGE;
 import static pl.project.wwsis.ecommerceshop.shop_accountsManagement.constant.EmailConstant.EMAIL_SENT;
 import static pl.project.wwsis.ecommerceshop.shop_accountsManagement.constant.FileConstant.*;
@@ -186,6 +187,15 @@ public class CustomerController extends ExceptionHandling {
         return new ResponseEntity<Customer>(customer, OK);
     }
 
+    @PostMapping(value = "/profile-image/{username}", consumes = MULTIPART_FORM_DATA_VALUE)
+    public void uploadAccountImageToS3(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) {
+        userService.uploadImageToS3(username, file);
+    }
+
+    @GetMapping(value = "/profile-image/{username}")
+    public byte[] getAccountImageFromS3(@PathVariable("username") String username) {
+        return userService.getImageFromS3(username);
+    }
 
     private HttpHeaders getJwtHeaders(CustomerPrincipal customerPrincipal) {
         HttpHeaders httpHeaders = new HttpHeaders();
