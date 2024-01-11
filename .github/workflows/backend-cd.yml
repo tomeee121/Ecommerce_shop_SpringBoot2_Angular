@@ -13,6 +13,7 @@ on:
 
 jobs:
   deploy:
+    if: false
     defaults:
       run:
         working-directory: backend
