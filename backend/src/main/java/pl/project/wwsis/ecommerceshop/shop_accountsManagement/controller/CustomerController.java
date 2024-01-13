@@ -188,8 +188,9 @@ public class CustomerController extends ExceptionHandling {
     }
 
     @PostMapping(value = "/profile-image/{username}", consumes = MULTIPART_FORM_DATA_VALUE)
-    public void uploadAccountImageToS3(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<HttpResponse> uploadAccountImageToS3(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) {
         userService.uploadImageToS3(username, file);
+        return response(OK, "Photo uploaded!");
     }
 
     @GetMapping(value = "/profile-image/{username}", produces = IMAGE_JPEG_VALUE)

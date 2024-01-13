@@ -64,8 +64,8 @@ export class UserService {
     return this.http.delete<CustomHttpResponse>(`${this.deleteOrderUrlBase}?order_tracking_number=${order_tracking_number}`);
   }
 
-  public uploadFile(formData: FormData, username: string): Observable<void> {
-      return this.http.post<void>(`${this.uploadUrl}/${username}`, formData);
+  public uploadFile(formData: FormData, username: string): Observable<CustomHttpResponse> {
+      return this.http.post<CustomHttpResponse>(`${this.uploadUrl}/${username}`, formData);
   }
 
   public addUsersToLocalCache(users: User[]): void {
