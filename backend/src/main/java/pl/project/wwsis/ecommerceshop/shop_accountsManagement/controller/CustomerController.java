@@ -192,7 +192,7 @@ public class CustomerController extends ExceptionHandling {
         userService.uploadImageToS3(username, file);
     }
 
-    @GetMapping(value = "/profile-image/{username}")
+    @GetMapping(value = "/profile-image/{username}", produces = IMAGE_JPEG_VALUE)
     public byte[] getAccountImageFromS3(@PathVariable("username") String username) {
         return userService.getImageFromS3(username);
     }
