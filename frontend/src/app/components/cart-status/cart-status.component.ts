@@ -49,7 +49,6 @@ export class CartStatusComponent implements OnInit {
       formData.append('file', elem.files[0]);
       this.userService.uploadFile(formData, this.firstName!).subscribe((response: CustomHttpResponse) => {
           this.notificationService.notify(NotificationType.SUCCESS, 'Successfully uploaded a photo!');
-          window.location.reload();
       },
       (error: HttpErrorResponse) => this.notificationService.notify(NotificationType.ERROR, error.message));
     }
