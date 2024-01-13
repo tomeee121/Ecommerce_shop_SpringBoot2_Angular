@@ -25,7 +25,6 @@ import pl.project.wwsis.ecommerceshop.shop_accountsManagement.filter.JwtAuthoriz
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.service.UserDetailsServiceImpl;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
