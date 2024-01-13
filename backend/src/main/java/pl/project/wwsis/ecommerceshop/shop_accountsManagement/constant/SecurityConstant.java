@@ -12,7 +12,7 @@ public class SecurityConstant {
     public static final String FORBIDDEN_MESSAGE = "Log in before you could access this page!";
     public static final String ACCESS_DENIED = "You do not have enough permission to access the page!";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
-    public static final String[] PUBLIC_URLS = {"/console/**","/customer/login", "/customer/register", "/customer/resetPassword/**", "/api/**", "/checkout/**"};
+    public static final String[] PUBLIC_URLS = {"/customer/**","/console/**","/customer/login", "/customer/register", "/customer/resetPassword/**", "/api/**", "/checkout/**"};
 //public static final String[] PUBLIC_URLS = {"**"};
 
 
