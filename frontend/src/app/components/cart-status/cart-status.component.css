@@ -1,0 +1,27 @@
+.container-inline {
+  display: inline-block;
+  flex-wrap: wrap;
+}
+
+.img-container {
+  display: inline-block;
+  margin-right: 0.2vw;
+}
+
+.img-style {
+  height: 3.8vw;
+  margin-bottom: 0.4px;
+  width: 10vw;
+  overflow: hidden;
+}
+
+.image-input {
+  width: 13vw;
+  height: 2.2vw;
+  display: flex;
+}
+
+.is-logged-in-container {
+  display: inline-block;
+  margin-top: 0.1vw;
+}

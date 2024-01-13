@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CartService} from "../../services/cart.service";
 import {AuthenticationService} from "../../services/authentication.service";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-cart-status',
@@ -15,7 +16,7 @@ export class CartStatusComponent implements OnInit {
   firstName: string | undefined;
   storage: Storage = sessionStorage;
 
-  constructor(private cartService: CartService, private authenticationService:AuthenticationService) { }
+  constructor(private cartService: CartService, private authenticationService:AuthenticationService, private userService: UserService) { }
 
   ngOnInit(): void {
     this.subscribeQuantityDataForCartItem();
@@ -34,6 +35,16 @@ export class CartStatusComponent implements OnInit {
     this.cartService.totalPrice.subscribe(data2 => this.cartItemsAmountOfMoney=data2);
   }
 
+  file(event) {
+    let elem = event.target;
+    if(elem.files.length > 0) {
+      let formData = new FormData();
+      formData.append('file', elem.files[0]);
+      this.userService.uploadFile(formData, this.firstName!).subscribe(data => {
+      console.log(data); window.location.reload();
+      });
+    }
+  }
 
   logout() {
     this.authenticationService.logout();

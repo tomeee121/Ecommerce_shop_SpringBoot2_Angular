@@ -9,5 +9,6 @@ export const environment = {
     baseCountryUrl: 'https://ecommerce-shop.tomasz-borowski.com/api/countries',
     baseUrlProducts: 'https://ecommerce-shop.tomasz-borowski.com/api/products',
     categoryUrl: 'https://ecommerce-shop.tomasz-borowski.com/api/product-category',
-    purchaseUrl: 'https://ecommerce-shop.tomasz-borowski.com/checkout/purchase'
+    purchaseUrl: 'https://ecommerce-shop.tomasz-borowski.com/checkout/purchase',
+    uploadUrl: 'https://ecommerce-shop.tomasz-borowski.com/customer/profile-image'
 };

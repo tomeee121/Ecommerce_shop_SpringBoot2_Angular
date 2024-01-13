@@ -17,6 +17,7 @@ export class UserService {
   private allShoppingHistoryUrlBase: string = environment.allShoppingHistoryUrlBase
   private deleteOrderUrlBase: string = environment.deleteOrderUrlBase
   private customerUrl: string = environment.customerCustomUrl;
+  private uploadUrl: string = environment.uploadUrl;
 
 
   constructor(private http: HttpClient) {
@@ -61,6 +62,10 @@ export class UserService {
 
   public deleteOrder(order_tracking_number: string): Observable<CustomHttpResponse | HttpErrorResponse>{
     return this.http.delete<CustomHttpResponse>(`${this.deleteOrderUrlBase}?order_tracking_number=${order_tracking_number}`);
+  }
+
+  public uploadFile(formData: FormData, username: string): Observable<void> {
+      return this.http.post<void>(`${this.uploadUrl}/${username}`, formData);
   }
 
   public addUsersToLocalCache(users: User[]): void {

@@ -13,7 +13,8 @@ export const environment = {
   baseCountryUrl: 'http://localhost:8080/api/countries',
   baseUrlProducts: 'http://localhost:8080/api/products',
   categoryUrl: 'http://localhost:8080/api/product-category',
-  purchaseUrl: 'http://localhost:8080/checkout/purchase'
+  purchaseUrl: 'http://localhost:8080/checkout/purchase',
+  uploadUrl: 'http://localhost:8080/customer/profile-image'
 };
 
 /*
