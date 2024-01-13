@@ -5,8 +5,8 @@
     </div>
   </a>
   <div class="container-inline">
-    <div class="img-container">
-      <img class="rounded mx-auto img-style" src="http://localhost:8080/customer/profile-image/tomeee121">
+    <div *ngIf="isLoggedIn" class="img-container">
+      <img class="rounded mx-auto img-style" src="{{uploadUrl}}/{{firstName}}">
     </div>
     <div *ngIf="isLoggedIn" class="is-logged-in-container">
       <div class="col-md-4 image-input">
