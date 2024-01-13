@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CartService} from "../../services/cart.service";
 import {AuthenticationService} from "../../services/authentication.service";
 import {UserService} from "../../services/user.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-cart-status',
@@ -15,6 +16,7 @@ export class CartStatusComponent implements OnInit {
   isLoggedIn: boolean = false;
   firstName: string | undefined;
   storage: Storage = sessionStorage;
+  uploadUrl: string = environment.uploadUrl;
 
   constructor(private cartService: CartService, private authenticationService:AuthenticationService, private userService: UserService) { }
 
@@ -41,7 +43,7 @@ export class CartStatusComponent implements OnInit {
       let formData = new FormData();
       formData.append('file', elem.files[0]);
       this.userService.uploadFile(formData, this.firstName!).subscribe(data => {
-      console.log(data); window.location.reload();
+        window.location.reload();
       });
     }
   }
