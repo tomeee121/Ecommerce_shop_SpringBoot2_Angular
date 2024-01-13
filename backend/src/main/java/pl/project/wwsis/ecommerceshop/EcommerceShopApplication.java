@@ -20,14 +20,14 @@ public class EcommerceShopApplication {
         new File(USER_FOLDER).mkdirs();
     }
 
-    @Bean
-    CommandLineRunner runner(S3Service service, S3Buckets s3Buckets) {
-        return args -> {
-            service.putObject(s3Buckets.getEcommerce(), "test3", "hello world 3".getBytes());
-            byte[] object = service.getObject(s3Buckets.getEcommerce(), "test3");
-            System.out.println("Test upload' result: " + new String(object));
-        };
-    }
+//    @Bean
+//    CommandLineRunner runner(S3Service service, S3Buckets s3Buckets) {
+//        return args -> {
+//            service.putObject(s3Buckets.getEcommerce(), "test3", "hello world 3".getBytes());
+//            byte[] object = service.getObject(s3Buckets.getEcommerce(), "test3");
+//            System.out.println("Test upload' result: " + new String(object));
+//        };
+//    }
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
