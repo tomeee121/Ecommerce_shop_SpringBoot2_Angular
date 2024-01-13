@@ -404,9 +404,10 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     @Transactional
     @Override
     public void uploadImageToS3(String username, MultipartFile file) {
+        if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) throw new IllegalStateException("Can not upload image for others!");
+
         Customer customer = findByUsername(username);
         if (customer == null) throw new IllegalStateException("Such username does not exist!");
-        if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) throw new IllegalStateException("Can not upload image for others!");
 
         String imageName = customerRepo.getProfileImageKeyByUsername(username);
         if(imageName != null) s3service.removeObject(s3Buckets.getEcommerce(), imageName);
@@ -423,6 +424,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Transactional
     public byte[] getImageFromS3(String username) {
+        if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) throw new IllegalStateException("Can not get an image of someone else!");
+
         Customer customer = findByUsername(username);
         if (customer == null) throw new IllegalStateException("Such username does not exist!");
         String imageName = customerRepo.getProfileImageKeyByUsername(username);

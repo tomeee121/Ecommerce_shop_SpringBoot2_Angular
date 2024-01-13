@@ -7,16 +7,13 @@ import {NotificationService} from "../../services/notification.service";
 import {NotificationType} from "../../enum/notification-type.enum";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {CustomHttpResponse} from "../../common/custom-http-response";
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-cart-status',
   templateUrl: './cart-status.component.html',
-  styleUrls: ['./cart-status.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./cart-status.component.css']
 })
 export class CartStatusComponent implements OnInit {
 
@@ -24,12 +21,14 @@ export class CartStatusComponent implements OnInit {
   cartItemsAmountOfMoney: number = 0;
   isLoggedIn: boolean = false;
   firstName: string | undefined;
-  firstNameForImage: string | undefined;
+  image: any;
   storage: Storage = sessionStorage;
   uploadUrl: string = environment.uploadUrl;
 
   constructor(private cartService: CartService, private authenticationService:AuthenticationService, private userService: UserService,
-              private notificationService:NotificationService, private cdRef: ChangeDetectorRef) { }
+              private notificationService:NotificationService, private cdRef: ChangeDetectorRef, private sanitizer: DomSanitizer) {
+
+              }
 
   ngOnInit(): void {
     this.subscribeQuantityDataForCartItem();
@@ -37,8 +36,13 @@ export class CartStatusComponent implements OnInit {
 
     this.authenticationService.isLoggedIn();
     this.authenticationService.loginBehaviourSubject.subscribe(data => {this.isLoggedIn = data})
-    this.authenticationService.nameBehaviourSubject.subscribe(data => {this.firstName = data; this.firstNameForImage = data});
+    this.authenticationService.nameBehaviourSubject.subscribe(data => {this.firstName = data});
 
+    this.userService.downloadImageFromApi(this.firstName!).subscribe(blob => {
+      let objectURL = URL.createObjectURL(blob);
+      this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    })
+    this.cdRef.detectChanges();
   }
 
   subscribeQuantityDataForCartItem(){
@@ -55,7 +59,10 @@ export class CartStatusComponent implements OnInit {
       formData.append('file', elem.files[0]);
       this.userService.uploadFile(formData, this.firstName!).subscribe((response: CustomHttpResponse) => {
           this.notificationService.notify(NotificationType.SUCCESS, 'Successfully uploaded a photo!');
-          this.firstNameForImage = this.firstNameForImage+'?v=1'
+          this.userService.downloadImageFromApi(this.firstName!).subscribe(blob => {
+            let objectURL = URL.createObjectURL(blob);
+            this.image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          })
           this.cdRef.detectChanges();
       },
       (error: HttpErrorResponse) => this.notificationService.notify(NotificationType.ERROR, error.message));
