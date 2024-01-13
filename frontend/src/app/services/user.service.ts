@@ -68,6 +68,10 @@ export class UserService {
       return this.http.post<CustomHttpResponse>(`${this.uploadUrl}/${username}`, formData);
   }
 
+  public downloadImageFromApi(username: string): Observable<any> {
+      return this.http.get(`${this.uploadUrl}/${username}`, {responseType: 'blob'})
+  }
+
   public addUsersToLocalCache(users: User[]): void {
     localStorage.setItem('users', JSON.stringify(users));
   }

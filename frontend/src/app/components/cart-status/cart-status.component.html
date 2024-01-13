@@ -6,7 +6,7 @@
   </a>
   <div class="container-inline">
     <div *ngIf="isLoggedIn" class="img-container">
-      <img class="rounded mx-auto img-style" src="{{uploadUrl}}/{{firstNameForImage}}">
+      <img class="rounded mx-auto img-style" [src]="image">
     </div>
     <div *ngIf="isLoggedIn" class="is-logged-in-container">
       <div class="col-md-4 image-input">

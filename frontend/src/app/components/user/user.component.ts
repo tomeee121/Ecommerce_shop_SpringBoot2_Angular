@@ -64,10 +64,6 @@ export class UserComponent implements OnInit, OnDestroy {
 
   }
 
-  refresh() {
-//     window.location.reload();
-  }
-
   changeStatus(order_tracking_number: string, status: string) {
     console.log(status)
     // @ts-ignore
