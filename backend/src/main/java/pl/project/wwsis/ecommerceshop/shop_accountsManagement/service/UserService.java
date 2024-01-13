@@ -28,4 +28,8 @@ public interface UserService {
     void deleteOrder(String order_tracking_number);
 
     void updateOrderStatus(String order_nr, String status);
+
+    void uploadImageToS3(String username, MultipartFile file);
+
+    byte[] getImageFromS3(String username);
 }

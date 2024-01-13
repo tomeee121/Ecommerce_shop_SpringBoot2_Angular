@@ -4,16 +4,26 @@
       Login
     </div>
   </a>
-  <a routerLink="/user/management">
-  <div *ngIf="isLoggedIn" class="total" style="display: inline-block; cursor: pointer">
-    Welcome back {{firstName}}
-  </div>
-  </a>
-    <div *ngIf="isLoggedIn" (click)="logout()" class="total" style="cursor: pointer; display: inline-block">
-      Logout
+  <div class="container-inline">
+    <div class="img-container">
+      <img class="rounded mx-auto img-style" src="http://localhost:8080/customer/profile-image/tomeee121">
     </div>
-  <a routerLink="/cart-details">
-    <div class="total" style="display: inline-block">{{cartItemsAmountOfMoney | currency: 'USD'}}<span> {{cartItemsQuantity}}</span></div>
-    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-  </a>
+    <div *ngIf="isLoggedIn" class="is-logged-in-container">
+      <div class="col-md-4 image-input">
+        <input name="image" class="img-responsive" type="file" (change)="file($event)" required>
+      </div>
+    </div>
+    <a routerLink="/user/management">
+    <div *ngIf="isLoggedIn" class="total" style="display: inline-block; cursor: pointer">
+      Welcome back {{firstName}}
+    </div>
+    </a>
+      <div *ngIf="isLoggedIn" (click)="logout()" class="total" style="cursor: pointer; display: inline-block">
+        Logout
+      </div>
+    <a routerLink="/cart-details">
+      <div class="total" style="display: inline-block">{{cartItemsAmountOfMoney | currency: 'USD'}}<span> {{cartItemsQuantity}}</span></div>
+      <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+    </a>
+  </div>
 </div>

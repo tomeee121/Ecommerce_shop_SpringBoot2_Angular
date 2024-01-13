@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.DTO.OrderHistoryDTO;
+import pl.project.wwsis.ecommerceshop.shop_accountsManagement.config.S3Buckets;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.constant.FileConstant;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.enums.Role;
 import pl.project.wwsis.ecommerceshop.shop_accountsManagement.exception.EmailExistException;
@@ -36,7 +38,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -60,6 +61,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     private MailSenderBeanForAdmin mailSenderForAdmin;
     private OrderRepo orderRepo;
     private PasswordGenerator passwordGenerator;
+    private S3Service s3service;
+    private S3Buckets s3Buckets;
 
     @Autowired
     Environment env;
@@ -68,7 +71,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     public UserDetailsServiceImpl(CustomerRepo customerRepo, BCryptPasswordEncoder bCryptPasswordEncoder, LoginAttemptService loginAttemptService
             , MailSenderBeanForNormalUser mailSenderForNormalUser, MailSenderBeanForHR mailSenderForHR, MailSenderBeanForManager mailSenderForManager
-            , MailSenderBeanForSuperAdmin mailSenderForSuperAdmin, MailSenderBeanForAdmin mailSenderForAdmin, OrderRepo orderRepo, PasswordGenerator passwordGenerator) {
+            , MailSenderBeanForSuperAdmin mailSenderForSuperAdmin, MailSenderBeanForAdmin mailSenderForAdmin, OrderRepo orderRepo, PasswordGenerator passwordGenerator,
+                                  S3Service s3service, pl.project.wwsis.ecommerceshop.shop_accountsManagement.config.S3Buckets s3Buckets) {
         this.customerRepo = customerRepo;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.loginAttemptService = loginAttemptService;
@@ -79,6 +83,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         this.mailSenderForAdmin = mailSenderForAdmin;
         this.orderRepo = orderRepo;
         this.passwordGenerator = passwordGenerator;
+        this.s3service = s3service;
+        this.s3Buckets = s3Buckets;
     }
 
 
@@ -394,5 +400,36 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         return null;
 
     }
+
+    @Transactional
+    @Override
+    public void uploadImageToS3(String username, MultipartFile file) {
+        Customer customer = findByUsername(username);
+        if (customer == null) throw new IllegalStateException("Such username does not exist!");
+        if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) throw new IllegalStateException("Can not upload image for others!");
+
+        String imageName = customerRepo.getProfileImageKeyByUsername(username);
+        if(imageName != null) s3service.removeObject(s3Buckets.getEcommerce(), imageName);
+
+        UUID profileImageId = UUID.randomUUID();
+        String key = String.format("/profile-images/%s/%s", username, profileImageId);
+        try {
+            s3service.putObject(s3Buckets.getEcommerce(), key, file.getBytes());
+        } catch (IOException e) {
+                throw new RuntimeException(e);
+        }
+        customerRepo.updateProfileImageKey(key);
+    }
+
+    @Transactional
+    public byte[] getImageFromS3(String username) {
+        Customer customer = findByUsername(username);
+        if (customer == null) throw new IllegalStateException("Such username does not exist!");
+        String imageName = customerRepo.getProfileImageKeyByUsername(username);
+        if(imageName == null) throw new IllegalStateException("Such username does not have an image uploaded yet!");
+        return s3service.getObject(s3Buckets.getEcommerce(), imageName);
+    }
+
+
 
 }
