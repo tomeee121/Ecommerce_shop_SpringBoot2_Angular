@@ -423,6 +423,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     }
 
     @Transactional
+    @Override
     public byte[] getImageFromS3(String username) {
         if(!SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals(username)) throw new IllegalStateException("Can not get an image of someone else!");
 
